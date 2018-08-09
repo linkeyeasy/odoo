@@ -225,15 +225,18 @@ class WebsiteForum(http.Controller):
     @http.route('/forum/get_url_title', type='json', auth="user", methods=['POST'], website=True)
     def get_url_title(self, **kwargs):
         try:
-            req = requests.get(kwargs.get('url'), stream=True)
+            req = requests.get(kwargs.get('url'))
             req.raise_for_status()
-            arch = lxml.html.parse(req.raw)
+            arch = lxml.html.fromstring(req.content)
             return arch.find(".//title").text
         except IOError:
             return False
 
     @http.route(['''/forum/<model("forum.forum"):forum>/question/<model("forum.post", "[('forum_id','=',forum[0]),('parent_id','=',False),('can_view', '=', True)]"):question>'''], type='http', auth="public", website=True)
     def question(self, forum, question, **post):
+        if not forum.active:
+            return request.render("website_forum.header", {'forum': forum})
+
         # Hide posts from abusers (negative karma), except for moderators
         if not question.can_view:
             raise werkzeug.exceptions.NotFound()
@@ -253,7 +256,7 @@ class WebsiteForum(http.Controller):
         values.update({
             'main_object': question,
             'question': question,
-            'can_bump': (question.forum_id.allow_bump and not question.child_ids and (datetime.today() - datetime.strptime(question.write_date, tools.DEFAULT_SERVER_DATETIME_FORMAT)).days > 9),
+            'can_bump': (question.forum_id.allow_bump and not question.child_ids and (datetime.today() - question.write_date).days > 9),
             'header': {'question_data': True},
             'filters': filters,
             'reversed': reversed,

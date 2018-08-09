@@ -30,6 +30,8 @@ var FIELD_CLASSES = {
     text: 'o_list_text',
 };
 
+var HEADING_COLUMNS_TO_SKIP_IN_GROUPS = 2;
+
 var ListRenderer = BasicRenderer.extend({
     events: {
         'click tbody tr': '_onRowClicked',
@@ -37,6 +39,9 @@ var ListRenderer = BasicRenderer.extend({
         'click thead th.o_column_sortable': '_onSortColumn',
         'click .o_group_header': '_onToggleGroup',
         'click thead .o_list_record_selector input': '_onToggleSelection',
+        'keypress thead tr td' : '_onKeyPress',
+        'keydown tr' : '_onKeyDown',
+        'keydown thead tr' : '_onKeyDown',
     },
     /**
      * @constructor
@@ -47,8 +52,9 @@ var ListRenderer = BasicRenderer.extend({
      */
     init: function (parent, state, params) {
         this._super.apply(this, arguments);
-        this.hasHandle = false;
-        this.handleField = 'sequence';
+        // This attribute lets us know if there is a handle widget on a field,
+        // and on which field it is set.
+        this.handleField = null;
         this._processColumns(params.columnInvisibleFields || {});
         this.rowDecorations = _.chain(this.arch.attrs)
             .pick(function (value, key) {
@@ -59,17 +65,26 @@ var ListRenderer = BasicRenderer.extend({
         this.hasSelectors = params.hasSelectors;
         this.selection = [];
         this.pagers = []; // instantiated pagers (only for grouped lists)
+        this.editable = params.editable;
     },
 
     //--------------------------------------------------------------------------
     // Public
     //--------------------------------------------------------------------------
-
+    /**
+     * Order to focus to be given to the content of the current view
+     * @override
+     * @public
+     */
+    giveFocus:function() {
+        this.$('tbody .o_list_record_selector input:first()').focus();
+    },
     /**
      * @override
      */
     updateState: function (state, params) {
         this._processColumns(params.columnInvisibleFields || {});
+        this.selection = [];
         return this._super.apply(this, arguments);
     },
 
@@ -169,9 +184,11 @@ var ListRenderer = BasicRenderer.extend({
      */
     _processColumns: function (columnInvisibleFields) {
         var self = this;
-        self.hasHandle = false;
         self.handleField = null;
         this.columns = _.reject(this.arch.children, function (c) {
+            if (c.tag === 'control') {
+                return true;
+            }
             var reject = c.attrs.modifiers.column_invisible;
             // If there is an evaluated domain for the field we override the node
             // attribute to have the evaluated modifier value.
@@ -179,7 +196,6 @@ var ListRenderer = BasicRenderer.extend({
                 reject = columnInvisibleFields[c.attrs.name];
             }
             if (!reject && c.attrs.widget === 'handle') {
-                self.hasHandle = true;
                 self.handleField = c.attrs.name;
             }
             return reject;
@@ -191,19 +207,27 @@ var ListRenderer = BasicRenderer.extend({
      *
      * @private
      * @param {any} aggregateValues
+     * @param {Boolean} isHeader indicates wheter the groups rendered are on the header or on the footer
      * @returns {jQueryElement[]} a list of <td> with the aggregate values
      */
-    _renderAggregateCells: function (aggregateValues) {
+    _renderAggregateCells: function (aggregateValues, isHeader) {
         var self = this;
-        return _.map(this.columns, function (column) {
+
+        return _.map(this.columns, function (column, index) {
+            if (isHeader && index < HEADING_COLUMNS_TO_SKIP_IN_GROUPS-1 &&
+                self.columns.length > HEADING_COLUMNS_TO_SKIP_IN_GROUPS) {
+                return;
+            }
             var $cell = $('<td>');
             if (column.attrs.name in aggregateValues) {
                 var field = self.state.fields[column.attrs.name];
                 var value = aggregateValues[column.attrs.name].value;
                 var help = aggregateValues[column.attrs.name].help;
-                var formattedValue = field_utils.format[field.type](value, field, {
-                    escape: true,
-                });
+                var formatFunc = field_utils.format[column.attrs.widget];
+                if (!formatFunc) {
+                    formatFunc = field_utils.format[field.type];
+                }
+                var formattedValue = formatFunc(value, field, {escape: true});
                 $cell.addClass('o_list_number').attr('title', help).html(formattedValue);
             }
             return $cell;
@@ -260,7 +284,7 @@ var ListRenderer = BasicRenderer.extend({
 
         // We register modifiers on the <td> element so that it gets the correct
         // modifiers classes (for styling)
-        var modifiers = this._registerModifiers(node, record, $td);
+        var modifiers = this._registerModifiers(node, record, $td, _.pick(options, 'mode'));
         // If the invisible modifiers is true, the <td> element is left empty.
         // Indeed, if the modifiers was to change the whole cell would be
         // rerendered anyway.
@@ -274,8 +298,9 @@ var ListRenderer = BasicRenderer.extend({
             return $td.append(this._renderWidget(record, node));
         }
         if (node.attrs.widget || (options && options.renderWidgets)) {
-            var widget = this._renderFieldWidget(node, record, _.pick(options, 'mode'));
-            return $td.append(widget.$el);
+            var $el = this._renderFieldWidget(node, record, _.pick(options, 'mode'));
+            this._handleAttributes($el, node);
+            return $td.append($el);
         }
         var name = node.attrs.name;
         var field = this.state.fields[name];
@@ -285,6 +310,7 @@ var ListRenderer = BasicRenderer.extend({
             escape: true,
             isPassword: 'password' in node.attrs,
         });
+        this._handleAttributes($td, node);
         return $td.html(formattedValue);
     },
     /**
@@ -296,17 +322,11 @@ var ListRenderer = BasicRenderer.extend({
      * @returns {jQuery} a <button> element
      */
     _renderButton: function (record, node) {
-        var $button = $('<button>', {
-            type: 'button',
-            title: node.attrs.string,
+        var $button = this._renderButtonFromNode(node, {
+            extraClass: node.attrs.icon ? 'o_icon_button' : undefined,
+            textAsTitle: !!node.attrs.icon,
         });
-        if (node.attrs.icon) {
-            $button.addClass('o_icon_button');
-            $button.append($('<i>', {class: 'fa ' + node.attrs.icon}));
-        } else {
-            $button.text(node.attrs.string);
-        }
-
+        this._handleAttributes($button, node);
         this._registerModifiers(node, record, $button);
 
         if (record.res_id) {
@@ -324,7 +344,7 @@ var ListRenderer = BasicRenderer.extend({
                 var self = this;
                 $button.on("click", function (e) {
                     e.stopPropagation();
-                    self.do_warn(_t("Warning"), _t('Please click on the "save" button first'));
+                    self.do_warn(_t("Warning"), _t('Please click on the "save" button first.'));
                 });
             } else {
                 $button.prop('disabled', true);
@@ -349,21 +369,16 @@ var ListRenderer = BasicRenderer.extend({
      * aggregates, if applicable.
      *
      * @private
-     * @param {boolean} isGrouped if the view is grouped, we have to add an
-     *   extra <td>
      * @returns {jQueryElement} a <tfoot> element
      */
-    _renderFooter: function (isGrouped) {
+    _renderFooter: function () {
         var aggregates = {};
         _.each(this.columns, function (column) {
             if ('aggregate' in column) {
                 aggregates[column.attrs.name] = column.aggregate;
             }
         });
-        var $cells = this._renderAggregateCells(aggregates);
-        if (isGrouped) {
-            $cells.unshift($('<td>'));
-        }
+        var $cells = this._renderAggregateCells(aggregates, false);
         if (this.hasSelectors) {
             $cells.unshift($('<td>'));
         }
@@ -411,10 +426,7 @@ var ListRenderer = BasicRenderer.extend({
         var aggregateValues = _.mapObject(group.aggregateValues, function (value) {
             return { value: value };
         });
-        var $cells = this._renderAggregateCells(aggregateValues);
-        if (this.hasSelectors) {
-            $cells.unshift($('<td>'));
-        }
+        var $cells = this._renderAggregateCells(aggregateValues, true);
         var name = group.value === undefined ? _t('Undefined') : group.value;
         var groupBy = this.state.groupedBy[groupLevel];
         if (group.fields[groupBy.split(':')[0]].type !== 'boolean') {
@@ -423,6 +435,9 @@ var ListRenderer = BasicRenderer.extend({
         var $th = $('<th>')
                     .addClass('o_group_name')
                     .text(name + ' (' + group.count + ')');
+        if (this.columns.length >= HEADING_COLUMNS_TO_SKIP_IN_GROUPS) {
+            $th.attr('colspan',HEADING_COLUMNS_TO_SKIP_IN_GROUPS);
+        }
         var $arrow = $('<span>')
                             .css('padding-left', (groupLevel * 20) + 'px')
                             .css('padding-right', '5px')
@@ -476,7 +491,7 @@ var ListRenderer = BasicRenderer.extend({
                 } else {
                     // the opened group contains records
                     var $records = _.map(group.data, function (record) {
-                        return self._renderRow(record).prepend($('<td>'));
+                        return self._renderRow(record);
                     });
                     result.push($('<tbody>').append($records));
                 }
@@ -501,9 +516,6 @@ var ListRenderer = BasicRenderer.extend({
                 .append(_.map(this.columns, this._renderHeaderCell.bind(this)));
         if (this.hasSelectors) {
             $tr.prepend(this._renderSelector('th'));
-        }
-        if (isGrouped) {
-            $tr.prepend($('<th>').html('&nbsp;'));
         }
         return $('<thead>').append($tr);
     },
@@ -538,6 +550,10 @@ var ListRenderer = BasicRenderer.extend({
             .toggleClass('o-sort-down', isNodeSorted ? !order[0].asc : false)
             .toggleClass('o-sort-up', isNodeSorted ? order[0].asc : false)
             .addClass(field.sortable && 'o_column_sortable');
+
+        if (isNodeSorted) {
+            $th.attr('aria-sort', order[0].asc ? 'ascending': 'descending');
+        }
 
         if (field.type === 'float' || field.type === 'integer' || field.type === 'monetary') {
             $th.css({textAlign: 'right'});
@@ -574,7 +590,7 @@ var ListRenderer = BasicRenderer.extend({
                     .data('id', record.id)
                     .append($cells);
         if (this.hasSelectors) {
-            $tr.prepend(this._renderSelector('td'));
+            $tr.prepend(this._renderSelector('td', !record.res_id));
         }
         this._setDecorationClasses(record, $tr);
         return $tr;
@@ -594,15 +610,19 @@ var ListRenderer = BasicRenderer.extend({
      * view.  This is rendered as an input inside a div, so we can properly
      * style it.
      *
-     * Note that it takes a tag in argument, because selectores in the header
+     * Note that it takes a tag in argument, because selectors in the header
      * are renderd in a th, and those in the tbody are in a td.
      *
      * @private
-     * @param {any} tag either th or td
+     * @param {string} tag either th or td
+     * @param {boolean} disableInput if true, the input generated will be disabled
      * @returns {jQueryElement}
      */
-    _renderSelector: function (tag) {
+    _renderSelector: function (tag, disableInput) {
         var $content = dom.renderCheckbox();
+        if (disableInput) {
+            $content.find("input[type='checkbox']").prop('disabled', disableInput);
+        }
         return $('<' + tag + ' width="1">')
                     .addClass('o_list_record_selector')
                     .append($content);
@@ -626,13 +646,14 @@ var ListRenderer = BasicRenderer.extend({
         _.invoke(this.pagers, 'destroy');
         this.pagers = [];
 
+        var displayNoContentHelper = !this._hasContent() && !!this.noContentHelp;
         // display the no content helper if there is no data to display
-        if (!this._hasContent() && this.noContentHelp) {
-            this._renderNoContentHelper();
+        if (displayNoContentHelper) {
+            this.$el.html(this._renderNoContentHelper());
             return this._super();
         }
 
-        var $table = $('<table>').addClass('o_list_view table table-condensed table-striped');
+        var $table = $('<table>').addClass('o_list_view table table-sm table-hover table-striped');
         this.$el
             .addClass('table-responsive')
             .append($table);
@@ -644,7 +665,7 @@ var ListRenderer = BasicRenderer.extend({
             $table
                 .append(this._renderHeader(true))
                 .append(this._renderGroups(this.state.data))
-                .append(this._renderFooter(true));
+                .append(this._renderFooter());
         } else {
             $table
                 .append(this._renderHeader())
@@ -686,7 +707,7 @@ var ListRenderer = BasicRenderer.extend({
      */
     _updateFooter: function () {
         this._computeAggregates();
-        this.$('tfoot').replaceWith(this._renderFooter(!!this.state.groupedBy.length));
+        this.$('tfoot').replaceWith(this._renderFooter());
     },
     /**
      * Whenever we change the state of the selected rows, we need to call this
@@ -709,6 +730,34 @@ var ListRenderer = BasicRenderer.extend({
     // Handlers
     //--------------------------------------------------------------------------
 
+    /**
+     * Manages the keyboard events on the list. If the list is not editable, when the user navigates to
+     * a cell using the keyboard, if he presses enter, enter the model represented by the line
+     *
+     * @private
+     * @param {KeyboardEvent} e
+     */
+    _onKeyDown : function(e) {
+        if (!this.editable) {
+            switch(e.which) {
+                case $.ui.keyCode.DOWN:
+                    $(e.currentTarget).next().find('input').focus();
+                    e.preventDefault();
+                    break;
+                case $.ui.keyCode.UP:
+                    $(e.currentTarget).prev().find('input').focus();
+                    e.preventDefault();
+                    break;
+                case $.ui.keyCode.ENTER:
+                    e.preventDefault();
+                    var id = $(e.currentTarget).data('id');
+                    if (id) {
+                        this.trigger_up('open_record', {id:id, target: e.target});
+                    }
+                    break;
+            }
+        }
+    },
     /**
      * @private
      * @param {MouseEvent} event
@@ -761,7 +810,7 @@ var ListRenderer = BasicRenderer.extend({
      */
     _onToggleSelection: function (event) {
         var checked = $(event.currentTarget).prop('checked') || false;
-        this.$('tbody .o_list_record_selector input').prop('checked', checked);
+        this.$('tbody .o_list_record_selector input:not(":disabled")').prop('checked', checked);
         this._updateSelection();
     },
 });

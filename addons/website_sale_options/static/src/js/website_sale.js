@@ -9,7 +9,7 @@ require('website_sale.website_sale');
 $('.oe_website_sale #add_to_cart, .oe_website_sale #products_grid .a-submit')
     .off('click')
     .removeClass('a-submit')
-    .click(function (event) {
+    .click(_.debounce(function (event) {
         var $form = $(this).closest('form');
         var quantity = parseFloat($form.find('input[name="add_qty"]').val() || 1);
         var product_id = parseInt($form.find('input[type="hidden"][name="product_id"], input[type="radio"][name="product_id"]:checked').first().val(),10);
@@ -35,7 +35,7 @@ $('.oe_website_sale #add_to_cart, .oe_website_sale #products_grid .a-submit')
                         $(this).remove();
                     });
 
-                $modal.on('click', '.a-submit', function () {
+                $modal.on('click', '.a-submit', function (ev) {
                     var $a = $(this);
                     $form.ajaxSubmit({
                         url:  '/shop/cart/update_option',
@@ -45,11 +45,12 @@ $('.oe_website_sale #add_to_cart, .oe_website_sale #products_grid .a-submit')
                                 window.location.pathname = window.location.pathname.replace(/shop([\/?].*)?$/, "shop/cart");
                             }
                             var $q = $(".my_cart_quantity");
-                            $q.parent().parent().removeClass("hidden", !quantity);
+                            $q.parent().parent().removeClass("d-none", !quantity);
                             $q.html(quantity).hide().fadeIn(600);
                         }
                     });
                     $modal.modal('hide');
+                    ev.preventDefault();
                 });
 
                 $modal.on('click', '.css_attribute_color input', function (event) {
@@ -60,7 +61,7 @@ $('.oe_website_sale #add_to_cart, .oe_website_sale #products_grid .a-submit')
                 $modal.on("click", "a.js_add, a.js_remove", function (event) {
                     event.preventDefault();
                     var $parent = $(this).parents('.js_product:first');
-                    $parent.find("a.js_add, span.js_remove").toggleClass("hidden");
+                    $parent.find("a.js_add, span.js_remove").toggleClass('d-none');
                     $parent.find("input.js_optional_same_quantity").val( $(this).hasClass("js_add") ? 1 : 0 );
                     $parent.find(".js_remove");
                 });
@@ -68,11 +69,11 @@ $('.oe_website_sale #add_to_cart, .oe_website_sale #products_grid .a-submit')
                 $modal.on("change", "input.js_quantity", function () {
                     var qty = parseFloat($(this).val());
                     if (qty === 1) {
-                        $(".js_remove .js_items").addClass("hidden");
-                        $(".js_remove .js_item").removeClass("hidden");
+                        $(".js_remove .js_items").addClass('d-none');
+                        $(".js_remove .js_item").removeClass('d-none');
                     } else {
-                        $(".js_remove .js_items").removeClass("hidden").text($(".js_remove .js_items:first").text().replace(/[0-9.,]+/, qty));
-                        $(".js_remove .js_item").addClass("hidden");
+                        $(".js_remove .js_items").removeClass('d-none').text($(".js_remove .js_items:first").text().replace(/[0-9.,]+/, qty));
+                        $(".js_remove .js_item").addClass('d-none');
                     }
                 });
 
@@ -95,6 +96,6 @@ $('.oe_website_sale #add_to_cart, .oe_website_sale #products_grid .a-submit')
                 });
             });
         return false;
-    });
+    }, 200, true));
 
 });

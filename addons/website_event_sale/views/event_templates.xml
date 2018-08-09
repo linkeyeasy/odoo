@@ -10,8 +10,8 @@
 <template id="index" inherit_id="website_event.index" name="Event's Ticket">
     <xpath expr="//li[@t-foreach='event_ids']/div/h4" position="before">
         <t t-if="event.state in ['draft', 'confirm'] and event.event_ticket_ids">
-            <span t-if="event.seats_availability == 'limited' and not event.seats_available" class="label label-danger pull-right">Sold Out</span>
-            <span t-if="event.seats_availability ==  'limited' and event.seats_available and event.seats_available &lt;= ((event.seats_max or 0) / 4)" class="label pull-right label-info">
+            <span t-if="event.seats_availability == 'limited' and not event.seats_available" class="badge badge-danger float-right">Sold Out</span>
+            <span t-if="event.seats_availability ==  'limited' and event.seats_available and event.seats_available &lt;= ((event.seats_max or 0) / 4)" class="badge float-right badge-info">
                 Only <t t-esc="event.seats_available"/> Remaining
             </span>
         </t>
@@ -39,7 +39,8 @@
                 </t>
                 <t t-set="price">
                     <t t-if="ticket.price or editable">
-                        <t t-if="(ticket.price-website.get_current_pricelist().currency_id.compute(ticket.price_reduce, event.company_id.sudo().currency_id)) &gt; 1">
+                        <t t-if="(ticket.price-website.get_current_pricelist().currency_id._convert(ticket.price_reduce, event.company_id.sudo().currency_id, event.company_id, datetime.date.today())) &gt; 1
+                                 and website.get_current_pricelist().discount_policy == 'without_discount'">
                             <del class="text-danger mr4" t-field="ticket.price" t-options='{
                                 "widget": "monetary",
                                 "from_currency": event.company_id.sudo().currency_id,
@@ -49,18 +50,18 @@
                         <span t-field="ticket.price_reduce" t-options='{
                             "widget": "monetary",
                             "display_currency": website.pricelist_id.currency_id
-                        }' groups="sale.group_show_price_subtotal"/>
+                        }' groups="account.group_show_line_subtotals_tax_excluded"/>
                         <span t-field="ticket.price_reduce_taxinc" t-options='{
                             "widget": "monetary",
                             "display_currency": website.pricelist_id.currency_id
-                        }' groups="sale.group_show_price_total"/>
+                        }' groups="account.group_show_line_subtotals_tax_included"/>
                         <span itemprop="price" style="display:none;" t-esc="ticket.price"/>
                         <span itemprop="priceCurrency" style="display:none;" t-esc="website.pricelist_id.currency_id.name"/>
                     </t>
                     <t t-if="not ticket.price and not editable">
                         <span>Free</span>
                     </t>
-                    <span t-if="ticket.seats_max and ((ticket.seats_reserved or 0)*100 / ticket.seats_max)&gt;75" class="badge" itemprop="availability" content="http://schema.org/LimitedAvailability">
+                    <span t-if="ticket.seats_max and ((ticket.seats_reserved or 0)*100 / ticket.seats_max)&gt;75" class="badge badge-pill" itemprop="availability" content="http://schema.org/LimitedAvailability">
                         <t t-esc="ticket.seats_max - ticket.seats_reserved"/>
                         <span>left</span>
                     </span>
@@ -79,7 +80,7 @@
         </t>
     </xpath>
     <xpath expr="//form[@id='registration_form']" position="attributes">
-        <attribute name="t-if">event.event_ticket_ids</attribute>
+        <attribute name="t-if">event.event_ticket_ids and not all([ticket.is_expired for ticket in event.event_ticket_ids])</attribute>
     </xpath>
 </template>
 
@@ -91,7 +92,7 @@
         </attribute>
     </xpath>
     <xpath expr="//del" position="attributes">
-        <attribute name="t-attf-class" separator=" " add="#{line.event_id and 'hidden' or ''}"/>
+        <attribute name="t-attf-class" separator=" " add="#{line.event_id and 'd-none' or ''}"/>
     </xpath>
 </template>
 </odoo>

@@ -4,7 +4,9 @@ odoo.define('web_tour.TourManager', function(require) {
 var core = require('web.core');
 var local_storage = require('web.local_storage');
 var mixins = require('web.mixins');
+var utils = require('web_tour.utils');
 var RainbowMan = require('web.RainbowMan');
+var RunningTourActionHelper = require('web_tour.RunningTourActionHelper');
 var ServicesMixin = require('web.ServicesMixin');
 var session = require('web.session');
 var Tip = require('web_tour.Tip');
@@ -13,146 +15,11 @@ var _t = core._t;
 
 var RUNNING_TOUR_TIMEOUT = 10000;
 
-function get_step_key(name) {
-    return 'tour_' + name + '_step';
-}
-function get_running_key() {
-    return 'running_tour';
-}
-function get_running_delay_key() {
-    return get_running_key() + "_delay";
-}
-
-function get_first_visible_element($elements) {
-    for (var i = 0 ; i < $elements.length ; i++) {
-        var $i = $elements.eq(i);
-        if ($i.is(':visible:hasVisibility')) {
-            return $i;
-        }
-    }
-    return $();
-}
-
-function do_before_unload(if_unload_callback, if_not_unload_callback) {
-    if_unload_callback = if_unload_callback || function () {};
-    if_not_unload_callback = if_not_unload_callback || if_unload_callback;
-
-    var old_before = window.onbeforeunload;
-    var reload_timeout;
-    window.onbeforeunload = function () {
-        clearTimeout(reload_timeout);
-        window.onbeforeunload = old_before;
-        if_unload_callback();
-        if (old_before) return old_before.apply(this, arguments);
-    };
-    reload_timeout = _.defer(function () {
-        window.onbeforeunload = old_before;
-        if_not_unload_callback();
-    });
-}
-
-var RunningTourActionHelper = core.Class.extend({
-    init: function (tip_widget) {
-        this.tip_widget = tip_widget;
-    },
-    click: function (element) {
-        this._click(this._get_action_values(element));
-    },
-    text: function (text, element) {
-        this._text(this._get_action_values(element), text);
-    },
-    drag_and_drop: function (to, element) {
-        this._drag_and_drop(this._get_action_values(element), to);
-    },
-    keydown: function (keyCodes, element) {
-        this._keydown(this._get_action_values(element), keyCodes.split(/[,\s]+/));
-    },
-    auto: function (element) {
-        var values = this._get_action_values(element);
-        if (values.consume_event === "input") {
-            this._text(values);
-        } else {
-            this._click(values);
-        }
-    },
-    _get_action_values: function (element) {
-        var $e = $(element);
-        var $element = element ? get_first_visible_element($e) : this.tip_widget.$anchor;
-        if ($element.length === 0) {
-            $element = $e.first();
-        }
-        var consume_event = element ? Tip.getConsumeEventType($element) : this.tip_widget.consume_event;
-        return {
-            $element: $element,
-            consume_event: consume_event,
-        };
-    },
-    _click: function (values) {
-        trigger_mouse_event(values.$element, "mouseover");
-        values.$element.trigger("mouseenter");
-        trigger_mouse_event(values.$element, "mousedown");
-        trigger_mouse_event(values.$element, "mouseup");
-        trigger_mouse_event(values.$element, "click");
-        trigger_mouse_event(values.$element, "mouseout");
-        values.$element.trigger("mouseleave");
-
-        function trigger_mouse_event($element, type) {
-            var e = document.createEvent("MouseEvents");
-            e.initMouseEvent(type, true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, $element[0]);
-            $element[0].dispatchEvent(e);
-        }
-    },
-    _text: function (values, text) {
-        this._click(values);
-
-        text = text || "Test";
-        if (values.consume_event === "input") {
-            values.$element.trigger("keydown").val(text).trigger("keyup").trigger("input");
-        } else if (values.$element.is("select")) {
-            var $options = values.$element.children("option");
-            $options.prop("selected", false).removeProp("selected");
-            var $selectedOption = $options.filter(function () { return $(this).val() === text; });
-            if ($selectedOption.length === 0) {
-                $selectedOption = $options.filter(function () { return $(this).text() === text; });
-            }
-            $selectedOption.prop("selected", true);
-            this._click(values);
-        } else {
-            values.$element.text(text);
-        }
-        values.$element.trigger("change");
-    },
-    _drag_and_drop: function (values, to) {
-        var $to = $(to || document.body);
-
-        var elementCenter = values.$element.offset();
-        elementCenter.left += values.$element.outerWidth()/2;
-        elementCenter.top += values.$element.outerHeight()/2;
-
-        var toCenter = $to.offset();
-        toCenter.left += $to.outerWidth()/2;
-        toCenter.top += $to.outerHeight()/2;
-
-        values.$element.trigger($.Event("mousedown", {which: 1, pageX: elementCenter.left, pageY: elementCenter.top}));
-        values.$element.trigger($.Event("mousemove", {which: 1, pageX: toCenter.left, pageY: toCenter.top}));
-        values.$element.trigger($.Event("mouseup", {which: 1, pageX: toCenter.left, pageY: toCenter.top}));
-    },
-    _keydown: function (values, keyCodes) {
-        while (keyCodes.length) {
-            var keyCode = +keyCodes.shift();
-            values.$element.trigger({type: "keydown", keyCode: keyCode});
-            if ((keyCode > 47 && keyCode < 58) // number keys
-                || keyCode === 32 // spacebar
-                || (keyCode > 64 && keyCode < 91) // letter keys
-                || (keyCode > 95 && keyCode < 112) // numpad keys
-                || (keyCode > 185 && keyCode < 193) // ;=,-./` (in order)
-                || (keyCode > 218 && keyCode < 223)) {   // [\]' (in order))
-                document.execCommand("insertText", 0, String.fromCharCode(keyCode));
-            }
-            values.$element.trigger({type: "keyup", keyCode: keyCode});
-        }
-    },
-});
+var get_step_key = utils.get_step_key;
+var get_running_key = utils.get_running_key;
+var get_running_delay_key = utils.get_running_delay_key;
+var get_first_visible_element = utils.get_first_visible_element;
+var do_before_unload = utils.do_before_unload;
 
 return core.Class.extend(mixins.EventDispatcherMixin, ServicesMixin, {
     init: function(parent, consumed_tours) {
@@ -167,16 +34,24 @@ return core.Class.extend(mixins.EventDispatcherMixin, ServicesMixin, {
         this.running_step_delay = parseInt(local_storage.getItem(get_running_delay_key()), 10) || 10;
         this.edition = (_.last(session.server_version_info) === 'e') ? 'enterprise' : 'community';
         this._log = [];
+        console.log('Tour Manager is ready.  running_tour=' + this.running_tour);
     },
     /**
-     * Registers a tour described by the following arguments (in order)
-     * @param [String] tour's name
-     * @param [Object] dict of options (optional), available options are:
-     *   test [Boolean] true if the tour is dedicated to tests (it won't be enabled by default)
-     *   skip_enabled [Boolean] true to add a link to consume the whole tour in its tips
-     *   url [String] the url to load when manually running the tour
-     *   rainbowMan [Bool] use to display the rainbow effect at the end of tour
-     * @param [Array] dict of steps, each step being a dict containing a tip description
+     * Registers a tour described by the following arguments *in order*
+     *
+     * @param {string} name - tour's name
+     * @param {Object} [options] - options (optional), available options are:
+     * @param {boolean} [options.test=false] - true if this is only for tests
+     * @param {boolean} [options.skip_enabled=false]
+     *        true to add a link in its tips to consume the whole tour
+     * @param {string} [options.url]
+     *        the url to load when manually running the tour
+     * @param {boolean} [options.rainbowMan=true]
+     *        whether or not the rainbowman must be shown at the end of the tour
+     * @param {Deferred} [options.wait_for]
+     *        indicates when the tour can be started
+     * @param {Object[]} steps - steps' descriptions, each step being an object
+     *                     containing a tip description
      */
     register: function() {
         var args = Array.prototype.slice.call(arguments);
@@ -192,7 +67,7 @@ return core.Class.extend(mixins.EventDispatcherMixin, ServicesMixin, {
             name: name,
             steps: steps,
             url: options.url,
-            rainbowMan: options.rainbowMan || true,
+            rainbowMan: options.rainbowMan === undefined ? true : !!options.rainbowMan,
             test: options.test,
             wait_for: options.wait_for || $.when(),
         };
@@ -236,6 +111,7 @@ return core.Class.extend(mixins.EventDispatcherMixin, ServicesMixin, {
         }).bind(this));
     },
     run: function (tour_name, step_delay) {
+        console.log(_.str.sprintf("Preparing tour %s", tour_name));
         if (this.running_tour) {
             this._deactivate_tip(this.active_tooltips[this.running_tour]);
             this._consume_tour(this.running_tour, _.str.sprintf("Killing tour %s", this.running_tour));
@@ -300,6 +176,13 @@ return core.Class.extend(mixins.EventDispatcherMixin, ServicesMixin, {
         }
     },
     _check_for_tooltip: function (tip, tour_name) {
+
+        if ($('.blockUI').length) {
+            this._deactivate_tip(tip);
+            this._log.push("blockUI is preventing the tip to be consumed");
+            return;
+        }
+
         var $trigger;
         if (tip.in_modal !== false && this.$modal_displayed.length) {
             $trigger = this.$modal_displayed.find(tip.trigger);
@@ -400,13 +283,14 @@ return core.Class.extend(mixins.EventDispatcherMixin, ServicesMixin, {
     _consume_tour: function (tour_name, error) {
         delete this.active_tooltips[tour_name];
         //display rainbow at the end of any tour
-        if (this.rainbowMan && this.tours[tour_name].current_step === this.tours[tour_name].steps.length){
+        if (this.tours[tour_name].rainbowMan && this.running_tour !== tour_name &&
+            this.tours[tour_name].current_step === this.tours[tour_name].steps.length) {
             var $rainbow_message = $('<strong>' +
                                 '<b>Good job!</b>' +
                                 ' You went through all steps of this tour.' +
                                 '</strong>');
-            new RainbowMan({message: $rainbow_message, click_close: false}).appendTo(this.$body);
-        };
+            new RainbowMan({message: $rainbow_message}).appendTo(this.$body);
+        }
         this.tours[tour_name].current_step = 0;
         local_storage.removeItem(get_step_key(tour_name));
         if (this.running_tour === tour_name) {
@@ -473,18 +357,21 @@ return core.Class.extend(mixins.EventDispatcherMixin, ServicesMixin, {
     STEPS: {
         MENU_MORE: {
             edition: "community",
-            trigger: "body > nav",
+            trigger: "body > header > nav",
             position: "bottom",
             auto: true,
             run: function (actions) {
-                actions.auto("#menu_more_container > a");
+                var $more = $('.o_extra_menu_items > .dropdown-toggle');
+                if ($more.length) {
+                    actions.auto($more);
+                }
             },
         },
 
         TOGGLE_HOME_MENU: {
             edition: "enterprise",
             trigger: ".o_main_navbar .o_menu_toggle",
-            content: _t('Click the <i>Home icon</i> to navigate across apps.'),
+            content: _t('Click on the <i>Home icon</i> to navigate across apps.'),
             position: "bottom",
         },
 

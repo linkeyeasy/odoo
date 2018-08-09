@@ -5,7 +5,7 @@ var core = require('web.core');
 var Dialog = require('web.Dialog');
 var time = require('web.time');
 var weContext = require('web_editor.context');
-var widget = require('web_editor.widget');
+var weWidgets = require('web_editor.widget');
 var websiteNavbarData = require('website.navbar');
 var websiteRootData = require('website.WebsiteRoot');
 var Widget = require('web.Widget');
@@ -13,12 +13,12 @@ var Widget = require('web.Widget');
 var _t = core._t;
 var qweb = core.qweb;
 
-var PagePropertiesDialog = widget.Dialog.extend({
+var PagePropertiesDialog = weWidgets.Dialog.extend({
     template: 'website.pagesMenu.page_info',
-    xmlDependencies: widget.Dialog.prototype.xmlDependencies.concat(
+    xmlDependencies: weWidgets.Dialog.prototype.xmlDependencies.concat(
         ['/website/static/src/xml/website.pageProperties.xml']
     ),
-    events: _.extend({}, widget.Dialog.prototype.events, {
+    events: _.extend({}, weWidgets.Dialog.prototype.events, {
         'keyup input#page_name': '_onNameChanged',
         'keyup input#page_url': '_onUrlChanged',
         'change input#create_redirect': '_onCreateRedirectChanged',
@@ -42,19 +42,27 @@ var PagePropertiesDialog = widget.Dialog.extend({
         this.page_id = page_id;
 
         var buttons = [
-            {text: _t("Save"), classes: 'btn-primary o_save_button', click: this.save},
+            {text: _t("Save"), classes: 'btn-primary', click: this.save},
             {text: _t("Discard"), close: true},
         ];
         if (options.fromPageManagement) {
             buttons.push({
                 text: _t("Go To Page"),
                 icon: 'fa-globe',
-                classes: 'btn-link pull-right',
+                classes: 'btn-link float-right',
                 click: function (e) {
                     window.location.href = '/' + self.page.url;
                 },
             });
         }
+        buttons.push({
+            text: _t("Delete Page"),
+            icon: 'fa-trash',
+            classes: 'btn-link float-right',
+            click: function (e) {
+                _deletePage.call(this, self.page_id, options.fromPageManagement);
+            },
+        });
         this._super(parent, _.extend({}, {
             title: _t("Page Properties"),
             size: 'medium',
@@ -97,9 +105,9 @@ var PagePropertiesDialog = widget.Dialog.extend({
 
         var defs = [this._super.apply(this, arguments)];
 
-        this.$('.ask_for_redirect').addClass('hidden');
-        this.$('.redirect_type').addClass('hidden');
-        this.$('.warn_about_call').addClass('hidden');
+        this.$('.ask_for_redirect').addClass('d-none');
+        this.$('.redirect_type').addClass('d-none');
+        this.$('.warn_about_call').addClass('d-none');
 
         defs.push(this._getPageDependencies(this.page_id, context)
         .then(function (dependencies) {
@@ -136,7 +144,6 @@ var PagePropertiesDialog = widget.Dialog.extend({
             });
         }));
 
-        var l10n = _t.database.parameters;
         var datepickersOptions = {
             minDate: moment({y: 1900}),
             maxDate: moment().add(200, 'y'),
@@ -150,14 +157,15 @@ var PagePropertiesDialog = widget.Dialog.extend({
                 down: 'fa fa-chevron-down',
             },
             locale : moment.locale(),
-            format : time.strftime_to_moment_format(l10n.date_format +' '+ l10n.time_format),
+            format : time.getLangDatetimeFormat(),
             widgetPositioning : {
                 horizontal: 'auto',
                 vertical: 'top',
             },
+             widgetParent: 'body',
         };
         if (this.page.date_publish) {
-            datepickersOptions.defaultDate = this.page.date_publish;
+            datepickersOptions.defaultDate = time.str_to_datetime(this.page.date_publish);
         }
         this.$('#date_publish_container').datetimepicker(datepickersOptions);
 
@@ -183,9 +191,15 @@ var PagePropertiesDialog = widget.Dialog.extend({
         var context = weContext.get();
         var url = this.$('#page_url').val();
 
-        var date_publish = this.$('#date_publish').val();
-        if (date_publish !== '') {
-            date_publish = time.datetime_to_str(new Date(date_publish));
+        var $date_publish = this.$("#date_publish");
+        $date_publish.closest(".form-group").removeClass('o_has_error').find('.form-control, .custom-select').removeClass('is-invalid');
+        var date_publish = $date_publish.val();
+        if (date_publish !== "") {
+            date_publish = this._parse_date(date_publish);
+            if (!date_publish) {
+                $date_publish.closest(".form-group").addClass('o_has_error').find('.form-control, .custom-select').addClass('is-invalid');
+                return;
+            }
         }
         var params = {
             id: this.page.id,
@@ -205,7 +219,7 @@ var PagePropertiesDialog = widget.Dialog.extend({
             method: 'save_page_info',
             args: [[context.website_id], params],
             context: context,
-        }).then(function () {
+        }).then(function (url) {
             // If from page manager: reload url, if from page itself: go to
             // (possibly) new url
             if (self._getMainObject().model === 'website.page') {
@@ -280,6 +294,28 @@ var PagePropertiesDialog = widget.Dialog.extend({
             id: m[2] | 0,
         };
     },
+    /**
+     * Converts a string representing the browser datetime
+     * (exemple: Albanian: '2018-Qer-22 15.12.35.')
+     * to a string representing UTC in Odoo's datetime string format
+     * (exemple: '2018-04-22 13:12:35').
+     *
+     * The time zone of the datetime string is assumed to be the one of the
+     * browser and it will be converted to UTC (standard for Odoo).
+     *
+     * @private
+     * @param {String} value A string representing a datetime.
+     * @returns {String|false} A string representing an UTC datetime if the given value is valid, false otherwise.
+     */
+    _parse_date: function (value) {
+        var datetime = moment(value, time.getLangDatetimeFormat(), true);
+        if (datetime.isValid()) {
+            return time.datetime_to_str(datetime.toDate());
+        }
+        else {
+            return false;
+        }
+    },
 
     //--------------------------------------------------------------------------
     // Handlers
@@ -290,7 +326,7 @@ var PagePropertiesDialog = widget.Dialog.extend({
      */
     _onUrlChanged: function () {
         var url = this.$('input#page_url').val();
-        this.$('.ask_for_redirect').toggleClass('hidden', url === this.page.url);
+        this.$('.ask_for_redirect').toggleClass('d-none', url === this.page.url);
     },
     /**
      * @private
@@ -302,7 +338,7 @@ var PagePropertiesDialog = widget.Dialog.extend({
         // check only for url and not key
         var ext = '.' + this.page.name.split('.').pop();
         if (ext in this.supportedMimetype && ext !== '.html') {
-            this.$('.warn_about_call').toggleClass('hidden', name === this.page.name);
+            this.$('.warn_about_call').toggleClass('d-none', name === this.page.name);
         }
     },
     /**
@@ -310,24 +346,22 @@ var PagePropertiesDialog = widget.Dialog.extend({
      */
     _onCreateRedirectChanged: function () {
         var createRedirect = this.$('input#create_redirect').prop('checked');
-        this.$('.redirect_type').toggleClass('hidden', !createRedirect);
+        this.$('.redirect_type').toggleClass('d-none', !createRedirect);
     },
 });
 
-var MenuEntryDialog = widget.LinkDialog.extend({
-    xmlDependencies: widget.LinkDialog.prototype.xmlDependencies.concat(
+var MenuEntryDialog = weWidgets.LinkDialog.extend({
+    xmlDependencies: weWidgets.LinkDialog.prototype.xmlDependencies.concat(
         ['/website/static/src/xml/website.contentMenu.xml']
     ),
 
     /**
      * @constructor
-     * @override
      */
     init: function (parent, options, editor, data) {
         data.text = data.name || '';
         data.isNewWindow = data.new_window;
         this.data = data;
-        this.menu_link_options = options.menu_link_options;
         this._super(parent, _.extend({}, {
             title: _t("Create Menu"),
         }, options || {}), editor, data);
@@ -336,44 +370,42 @@ var MenuEntryDialog = widget.LinkDialog.extend({
      * @override
      */
     start: function () {
-        var self = this;
+        // Remove style related elements
         this.$('.o_link_dialog_preview').remove();
-        this.$('.window-new, .link-style').closest('.form-group').remove();
-        this.$('label[for="o_link_dialog_label_input"]').text(_t("Menu Label"));
-        if (this.menu_link_options) { // add menu link option only when adding new menu
-            self.$('#o_link_dialog_url_input').closest('.form-group').hide();
-            this.$('#o_link_dialog_label_input').closest('.form-group').after(qweb.render('website.contentMenu.dialog.edit.link_menu_options'));
-            // remove the label that is automatically added before
-            this.$('#o_link_dialog_url_input').parent().siblings().html('');
-            this.$('input[name=link_menu_options]').on('change', function () {
-                self.$('#o_link_dialog_url_input').closest('.form-group').toggle();
-            });
-        }
+        this.$('input[name="is_new_window"], .link-style').closest('.form-group').remove();
         this.$modal.find('.modal-lg').removeClass('modal-lg')
-                   .find('.col-md-8').removeClass('col-md-8').addClass('col-xs-12');
+                   .find('.col-lg-8').removeClass('col-lg-8').addClass('col-12');
+
+        // Adapt URL label
+        this.$('label[for="o_link_dialog_label_input"]').text(_t("Menu Label"));
+
+        this.$('#o_link_dialog_url_input').after(qweb.render('website.contentMenu.dialog.edit.link_menu_hint'));
+
         return this._super.apply(this, arguments);
     },
+
+    //--------------------------------------------------------------------------
+    // Public
+    //--------------------------------------------------------------------------
+
     /**
      * @override
      */
     save: function () {
         var $e = this.$('#o_link_dialog_label_input');
         if (!$e.val() || !$e[0].checkValidity()) {
-            $e.closest('.form-group').addClass('has-error');
+            $e.closest('.form-group').addClass('o_has_error').find('.form-control, .custom-select').addClass('is-invalid')
             $e.focus();
-            return;
-        }
-        if (this.$('input[name=link_menu_options]:checked').val() === 'new_page') {
-            window.location = '/website/add/' + encodeURIComponent($e.val()) + '?add_menu=1';
             return;
         }
         return this._super.apply(this, arguments);
     },
+
 });
 
-var SelectEditMenuDialog = widget.Dialog.extend({
+var SelectEditMenuDialog = weWidgets.Dialog.extend({
     template: 'website.contentMenu.dialog.select',
-    xmlDependencies: widget.Dialog.prototype.xmlDependencies.concat(
+    xmlDependencies: weWidgets.Dialog.prototype.xmlDependencies.concat(
         ['/website/static/src/xml/website.contentMenu.xml']
     ),
 
@@ -401,12 +433,12 @@ var SelectEditMenuDialog = widget.Dialog.extend({
     },
 });
 
-var EditMenuDialog = widget.Dialog.extend({
+var EditMenuDialog = weWidgets.Dialog.extend({
     template: 'website.contentMenu.dialog.edit',
-    xmlDependencies: widget.Dialog.prototype.xmlDependencies.concat(
+    xmlDependencies: weWidgets.Dialog.prototype.xmlDependencies.concat(
         ['/website/static/src/xml/website.contentMenu.xml']
     ),
-    events: _.extend({}, widget.Dialog.prototype.events, {
+    events: _.extend({}, weWidgets.Dialog.prototype.events, {
         'click a.js_add_menu': '_onAddMenuButtonClick',
         'click button.js_delete_menu': '_onDeleteMenuButtonClick',
         'click button.js_edit_menu': '_onEditMenuButtonClick',
@@ -534,7 +566,7 @@ var EditMenuDialog = widget.Dialog.extend({
      */
     _onAddMenuButtonClick: function () {
         var self = this;
-        var dialog = new MenuEntryDialog(this, {menu_link_options: true}, undefined, {});
+        var dialog = new MenuEntryDialog(this, {}, undefined, {});
         dialog.on('save', this, function (link) {
             var new_menu = {
                 id: _.uniqueId('new-'),
@@ -737,35 +769,54 @@ var PageManagement = Widget.extend({
     },
     _onDeletePageButtonClick: function (ev) {
         var pageId = $(ev.currentTarget).data('id');
-        var self = this;
-        var context = weContext.get();
-
-        var def = $.Deferred();
-        // Search the page dependencies
-        this._getPageDependencies(pageId, context)
-        .then(function (dependencies) {
-        // Inform the user about those dependencies and ask him confirmation
-            var confirmDef = $.Deferred();
-            Dialog.safeConfirm(self, "", {
-                title: _t("Delete Page"),
-                $content: $(qweb.render('website.delete_page', {dependencies: dependencies})),
-                confirm_callback: confirmDef.resolve.bind(confirmDef),
-                cancel_callback: def.resolve.bind(self),
-            });
-            return confirmDef;
-        }).then(function () {
-        // Delete the page if the user confirmed
-            return self._rpc({
-                model: 'website.page',
-                method: 'delete_page',
-                args: [pageId],
-                context: context,
-            });
-        }).then(function () {
-            window.location.reload(true);
-        }, def.reject.bind(def));
+        _deletePage.call(this, pageId, true);
     },
 });
+
+/**
+ * Deletes the page after showing a dependencies warning for the given page id.
+ *
+ * @private
+ * @param {integer} pageId - The ID of the page to be deleted
+ * @param {Boolean} fromPageManagement
+ *                  Is the function called by the page manager?
+ *                  It will affect redirect after page deletion: reload or '/'
+ */
+// TODO: This function should be integrated in a widget in the future
+function _deletePage(pageId, fromPageManagement) {
+    var self = this;
+    var context = weContext.get();
+    var def = $.Deferred();
+
+    // Search the page dependencies
+    this._getPageDependencies(pageId, context)
+    .then(function (dependencies) {
+    // Inform the user about those dependencies and ask him confirmation
+        var confirmDef = $.Deferred();
+        Dialog.safeConfirm(self, "", {
+            title: _t("Delete Page"),
+            $content: $(qweb.render('website.delete_page', {dependencies: dependencies})),
+            confirm_callback: confirmDef.resolve.bind(confirmDef),
+            cancel_callback: def.resolve.bind(self),
+        });
+        return confirmDef;
+    }).then(function () {
+    // Delete the page if the user confirmed
+        return self._rpc({
+            model: 'website.page',
+            method: 'delete_page',
+            args: [pageId],
+            context: context,
+        });
+    }).then(function () {
+        if (fromPageManagement) {
+            window.location.reload(true);
+        }
+        else {
+            window.location.href = '/';
+        }
+    }, def.reject.bind(def));
+}
 
 websiteNavbarData.websiteNavbarRegistry.add(ContentMenu, '#content-menu');
 websiteRootData.websiteRootRegistry.add(PageManagement, '#edit_website_pages');

@@ -30,11 +30,11 @@ class SaleOrder(models.Model):
     is_abandoned_cart = fields.Boolean('Abandoned Cart', compute='_compute_abandoned_cart', search='_search_abandoned_cart')
     cart_recovery_email_sent = fields.Boolean('Cart recovery email already sent')
 
-    @api.depends('state', 'payment_tx_id', 'payment_tx_id.state',
-                 'payment_acquirer_id', 'payment_acquirer_id.provider')
+    @api.depends('state', 'transaction_ids')
     def _compute_can_directly_mark_as_paid(self):
         for order in self:
-            order.can_directly_mark_as_paid = order.state in ['sent', 'sale'] and order.payment_tx_id and order.payment_acquirer_id.provider in ['transfer', 'manual']
+            transaction = order.get_portal_last_transaction()
+            order.can_directly_mark_as_paid = order.state in ['sent', 'sale'] and transaction and transaction.acquirer_id.provider in ['transfer', 'manual']
 
     @api.multi
     @api.depends('website_order_line.product_uom_qty', 'website_order_line.product_id')
@@ -47,7 +47,7 @@ class SaleOrder(models.Model):
     @api.depends('team_id.team_type', 'date_order', 'order_line', 'state', 'partner_id')
     def _compute_abandoned_cart(self):
         abandoned_delay = float(self.env['ir.config_parameter'].sudo().get_param('website_sale.cart_abandoned_delay', '1.0'))
-        abandoned_datetime = fields.Datetime.to_string(datetime.utcnow() - relativedelta(hours=abandoned_delay))
+        abandoned_datetime = datetime.utcnow() - relativedelta(hours=abandoned_delay)
         for order in self:
             domain = order.date_order <= abandoned_datetime and order.team_id.team_type == 'website' and order.state == 'draft' and order.partner_id.id != self.env.ref('base.public_partner').id and order.order_line
             order.is_abandoned_cart = bool(domain)
@@ -139,11 +139,22 @@ class SaleOrder(models.Model):
         """ Add or set product quantity, add_qty can be negative """
         self.ensure_one()
         SaleOrderLineSudo = self.env['sale.order.line'].sudo()
+
+        try:
+            if add_qty:
+                add_qty = float(add_qty)
+        except ValueError:
+            add_qty = 1
+        try:
+            if set_qty:
+                set_qty = float(set_qty)
+        except ValueError:
+            set_qty = 0
         quantity = 0
         order_line = False
         if self.state != 'draft':
             request.session['sale_order_id'] = None
-            raise UserError(_('It is forbidden to modify a sales order which is not in draft status'))
+            raise UserError(_('It is forbidden to modify a sales order which is not in draft status.'))
         if line_id is not False:
             order_lines = self._cart_find_product_line(product_id, line_id, **kwargs)
             order_line = order_lines and order_lines[0]
@@ -220,7 +231,7 @@ class SaleOrder(models.Model):
             'view_id': composer_form_view_id,
             'target': 'new',
             'context': {
-                'default_composition_mode': 'mass_mail' if len(self) > 1 else 'comment',
+                'default_composition_mode': 'mass_mail',
                 'default_res_id': self.ids[0],
                 'default_model': 'sale.order',
                 'default_use_template': bool(template_id),
@@ -245,3 +256,9 @@ class SaleOrder(models.Model):
             self.payment_tx_id.state = 'done'
         else:
             raise ValidationError(_("The quote should be sent and the payment acquirer type should be manual or wire transfer"))
+
+    def _set_demo_create_date(self, create_date):
+        self.env.cr.execute("""UPDATE sale_order SET create_date=%s WHERE id IN %s """, (create_date, tuple(self.ids)))
+        self.modified(['create_date'])
+        if self.env.recompute and self.env.context.get('recompute', True):
+            self.recompute()

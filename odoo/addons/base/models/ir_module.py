@@ -189,7 +189,7 @@ class Module(models.Model):
                     'output_encoding': 'unicode',
                     'xml_declaration': False,
                 }
-                output = publish_string(source=module.description or '', settings_overrides=overrides, writer=MyWriter())
+                output = publish_string(source=module.description if not module.application and module.description else '', settings_overrides=overrides, writer=MyWriter())
                 module.description_html = tools.html_sanitize(output)
 
     @api.depends('name')
@@ -292,6 +292,7 @@ class Module(models.Model):
     application = fields.Boolean('Application', readonly=True)
     icon = fields.Char('Icon URL')
     icon_image = fields.Binary(string='Icon', compute='_get_icon_image')
+    to_buy = fields.Boolean('Odoo Enterprise Module', default=False)
 
     _sql_constraints = [
         ('name_uniq', 'UNIQUE (name)', 'The name of the module must be unique!'),
@@ -303,7 +304,7 @@ class Module(models.Model):
             return True
         for module in self:
             if module.state in ('installed', 'to upgrade', 'to remove', 'to install'):
-                raise UserError(_('You try to remove a module that is installed or will be installed'))
+                raise UserError(_('You are trying to remove a module that is installed or will be installed.'))
         self.clear_caches()
         return super(Module, self).unlink()
 
@@ -410,17 +411,19 @@ class Module(models.Model):
                 todo = todo.mapped('dependencies_id.depend_id')
             return result
 
-        for category in install_mods.mapped('category_id').filtered('exclusive'):
-            # the installation is valid if all installed modules in category
-            # correspond to one module and all its dependencies in category
-            category_mods = install_mods.filtered(lambda mod: mod.category_id == category)
-            if not any(closure(module) & category_mods == category_mods
-                       for module in category_mods):
+        exclusives = self.env['ir.module.category'].search([('exclusive', '=', True)])
+        for category in exclusives:
+            # retrieve installed modules in category and sub-categories
+            categories = category.search([('id', 'child_of', category.ids)])
+            modules = install_mods.filtered(lambda mod: mod.category_id in categories)
+            # the installation is valid if all installed modules in categories
+            # belong to the transitive dependencies of one of them
+            if modules and not any(modules <= closure(module) for module in modules):
                 msg = _('You are trying to install incompatible modules in category "%s":')
                 labels = dict(self.fields_get(['state'])['state']['selection'])
                 raise UserError("\n".join([msg % category.name] + [
                     "- %s (%s)" % (module.shortdesc, labels[module.state])
-                    for module in category_mods
+                    for module in modules
                 ]))
 
         return dict(ACTION_DICT, name=_('Install'))
@@ -442,6 +445,13 @@ class Module(models.Model):
     def button_install_cancel(self):
         self.write({'state': 'uninstalled', 'demo': False})
         return True
+
+    @api.multi
+    def button_discover(self):
+        return {
+            'type': 'ir.actions.act_url',
+            'url': self.website,
+        }
 
     @assert_log_admin_access
     @api.multi
@@ -514,7 +524,7 @@ class Module(models.Model):
         _logger.info('getting next %s', Todos)
         active_todo = Todos.search([('state', '=', 'open')], limit=1)
         if active_todo:
-            _logger.info('next action is %s', active_todo)
+            _logger.info('next action is "%s"', active_todo.name)
             return active_todo.action_launch()
         return {
             'type': 'ir.actions.act_url',
@@ -666,7 +676,7 @@ class Module(models.Model):
         res = [0, 0]    # [update, add]
 
         default_version = modules.adapt_version('1.0')
-        known_mods = self.search([])
+        known_mods = self.with_context(lang=None).search([])
         known_mods_names = {mod.name: mod for mod in known_mods}
 
         # iterate through detected modules and update/create them in db
@@ -676,7 +686,7 @@ class Module(models.Model):
             values = self.get_values_from_terp(terp)
 
             if mod:
-                updated_values = {}
+                updated_values = {'to_buy': False}
                 for key in values:
                     old = getattr(mod, key)
                     updated = tools.ustr(values[key]) if isinstance(values[key], pycompat.string_types) else values[key]

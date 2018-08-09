@@ -102,7 +102,7 @@ var PivotController = AbstractController.extend({
      */
     renderButtons: function ($node) {
         if ($node) {
-            var context = {measures: _.pairs(_.omit(this.measures, '__count'))};
+            var context = {measures: _.sortBy(_.pairs(_.omit(this.measures, '__count')), function(x) { return x[0]; })};
             this.$buttons = $(QWeb.render('PivotView.buttons', context));
             this.$buttons.click(this._onButtonClick.bind(this));
             this.$buttons.find('button').tooltip();
@@ -126,6 +126,7 @@ var PivotController = AbstractController.extend({
         var table = this.model.exportData();
         if(table.measure_row.length + 1 > 256) {
             crash_manager.show_message(_t("For Excel compatibility, data cannot be exported if there are more than 256 columns.\n\nTip: try to flip axis, filter further or reduce the number of measures."));
+            framework.unblockUI();
             return;
         }
         framework.blockUI();
@@ -163,9 +164,9 @@ var PivotController = AbstractController.extend({
             fields: fields
         }));
 
-        this.$fieldSelection.find('ul').first()
+        this.$fieldSelection.find('.dropdown-menu').first()
             .css({top: top, left: left})
-            .show();
+            .addClass('show');
     },
     /**
      * @private
@@ -185,7 +186,7 @@ var PivotController = AbstractController.extend({
         var state = this.model.get({raw: true});
         _.each(this.measures, function (measure, name) {
             var isSelected = _.contains(state.measures, name);
-            self.$buttons.find('li[data-field="' + name + '"]')
+            self.$buttons.find('.dropdown-item[data-field="' + name + '"]')
                          .toggleClass('selected', isSelected);
         });
     },
@@ -214,8 +215,7 @@ var PivotController = AbstractController.extend({
                     .then(this.update.bind(this, {}, {reload: false}));
         }
         if ($target.parents('.o_pivot_measures_list').length) {
-            var parent = $target.parent();
-            var field = parent.data('field');
+            var field = $target.data('field');
             event.preventDefault();
             event.stopPropagation();
             this.model
@@ -297,11 +297,11 @@ var PivotController = AbstractController.extend({
     _onFieldMenuSelection: function (event) {
         event.preventDefault();
         var $target = $(event.target);
-        if ($target.parent().hasClass('disabled')) {
+        if ($target.hasClass('disabled')) {
             event.stopPropagation();
             return;
         }
-        var field = $target.parent().data('field');
+        var field = $target.data('field');
         var interval = $target.data('interval');
         var header = this.model.getHeader(this.lastHeaderSelected);
         if (interval) {

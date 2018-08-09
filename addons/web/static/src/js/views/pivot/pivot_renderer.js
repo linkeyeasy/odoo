@@ -9,7 +9,7 @@ var QWeb = core.qweb;
 
 var PivotRenderer = AbstractRenderer.extend({
     tagName: 'table',
-    className: 'table-hover table-condensed table-bordered',
+    className: 'table-hover table-sm table-bordered',
     events: _.extend({}, AbstractRenderer.prototype.events, {
         'hover td': '_onTdHover',
     }),
@@ -35,7 +35,7 @@ var PivotRenderer = AbstractRenderer.extend({
     _render: function () {
         if (!this._hasContent()) {
             // display the nocontent helper
-            this.replaceElement(QWeb.render('PivotView.nodata'));
+            this._replaceElement(QWeb.render('PivotView.nodata'));
             return this._super.apply(this, arguments);
         }
 
@@ -96,11 +96,16 @@ var PivotRenderer = AbstractRenderer.extend({
                     $cell.data('id', cell.id).data('measure', cell.measure);
                     if (cell.id === this.state.sortedColumn.id && cell.measure === this.state.sortedColumn.measure) {
                         $cell.addClass('o_pivot_measure_row_sorted_' + this.state.sortedColumn.order);
+                        if (this.state.sortedColumn.order == 'asc') {
+                            $cell.attr('aria-sorted', 'ascending');
+                        } else {
+                            $cell.attr('aria-sorted', 'descending');
+                        }
                     }
                 }
                 $row.append($cell);
 
-                $cell.toggleClass('hidden-xs', (cell.expanded !== undefined) || (cell.measure !== undefined && j < headers[i].length - this.state.measures.length));
+                $cell.toggleClass('d-none d-md-table-cell', (cell.expanded !== undefined) || (cell.measure !== undefined && j < headers[i].length - this.state.measures.length));
                 if (cell.height > 1) {
                     $cell.css('padding', 0);
                 }
@@ -124,7 +129,8 @@ var PivotRenderer = AbstractRenderer.extend({
             return self.state.fields[gb.split(':')[0]].string;
         });
         var measureTypes = this.state.measures.map(function (name) {
-            return self.state.fields[name].type;
+            var type = self.state.fields[name].type;
+            return type === 'many2one' ? 'integer' : type;
         });
         for (i = 0; i < rows.length; i++) {
             $row = $('<tr>');
@@ -153,7 +159,7 @@ var PivotRenderer = AbstractRenderer.extend({
                 }
                 $row.append($cell);
 
-                $cell.toggleClass('hidden-xs', j < length - nbrMeasures);
+                $cell.toggleClass('d-none d-md-table-cell', j < length - nbrMeasures);
             }
             $tbody.append($row);
         }

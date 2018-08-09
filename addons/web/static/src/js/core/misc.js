@@ -59,12 +59,14 @@ function blockUI() {
     var throbber = new Throbber();
     throbbers.push(throbber);
     throbber.appendTo($(".oe_blockui_spin_container"));
+    $(document.body).addClass('o_ui_blocked');
     return tmp;
 }
 
 function unblockUI() {
     _.invoke(throbbers, 'destroy');
     throbbers = [];
+    $(document.body).removeClass('o_ui_blocked');
     return $.unblockUI.apply($, arguments);
 }
 
@@ -137,17 +139,6 @@ function Home (parent, action) {
     redirect(url, action && action.params && action.params.wait);
 }
 core.action_registry.add("home", Home);
-
-/**
- * Client action to go back in breadcrumb history.
- * If can't go back in history stack, will go back to home.
- */
-function HistoryBack (parent) {
-    parent.history_back().fail(function () {
-        Home(parent);
-    });
-}
-core.action_registry.add("history_back", HistoryBack);
 
 function login() {
     redirect('/web/login');

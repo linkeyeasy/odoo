@@ -52,10 +52,11 @@ from inspect import currentframe, getargspec
 from pprint import pformat
 from weakref import WeakSet
 
-from decorator import decorator
+from decorator import decorate, decorator
 from werkzeug.local import Local, release_local
 
-from odoo.tools import frozendict, classproperty
+from odoo.tools import frozendict, classproperty, StackMap
+from odoo.exceptions import CacheMiss
 
 _logger = logging.getLogger(__name__)
 
@@ -315,6 +316,8 @@ def model(method):
 
         Notice that no ``ids`` are passed to the method in the traditional style.
     """
+    if method.__name__ == 'create':
+        return model_create_single(method)
     method._api = 'model'
     return method
 
@@ -416,6 +419,50 @@ def model_cr_context(method):
     """
     method._api = 'model_cr_context'
     return method
+
+
+_create_logger = logging.getLogger(__name__ + '.create')
+
+
+def _model_create_single(create, self, arg):
+    # 'create' expects a dict and returns a record
+    if isinstance(arg, Mapping):
+        return create(self, arg)
+    if len(arg) > 1:
+        _create_logger.debug("%s.create() called with %d dicts", self, len(arg))
+    return self.browse().concat(*(create(self, vals) for vals in arg))
+
+
+def model_create_single(method):
+    """ Decorate a method that takes a dictionary and creates a single record.
+        The method may be called with either a single dict or a list of dicts::
+
+            record = model.create(vals)
+            records = model.create([vals, ...])
+    """
+    wrapper = decorate(method, _model_create_single)
+    wrapper._api = 'model_create'
+    return wrapper
+
+
+def _model_create_multi(create, self, arg):
+    # 'create' expects a list of dicts and returns a recordset
+    if isinstance(arg, Mapping):
+        return create(self, [arg])
+    return create(self, arg)
+
+
+def model_create_multi(method):
+    """ Decorate a method that takes a list of dictionaries and creates multiple
+        records. The method may be called with either a single dict or a list of
+        dicts::
+
+            record = model.create(vals)
+            records = model.create([vals, ...])
+    """
+    wrapper = decorate(method, _model_create_multi)
+    wrapper._api = 'model_create'
+    return wrapper
 
 
 def cr(method):
@@ -664,15 +711,24 @@ def expected(decorator, func):
     return decorator(func) if not hasattr(func, '_api') else func
 
 
-
-def call_kw_model(method, self, args, kwargs):
+def _call_kw_model(method, self, args, kwargs):
     context, args, kwargs = split_context(method, args, kwargs)
     recs = self.with_context(context or {})
     _logger.debug("call %s.%s(%s)", recs, method.__name__, Params(args, kwargs))
     result = method(recs, *args, **kwargs)
     return downgrade(method, result, recs, args, kwargs)
 
-def call_kw_multi(method, self, args, kwargs):
+
+def _call_kw_model_create(method, self, args, kwargs):
+    # special case for method 'create'
+    context, args, kwargs = split_context(method, args, kwargs)
+    recs = self.with_context(context or {})
+    _logger.debug("call %s.%s(%s)", recs, method.__name__, Params(args, kwargs))
+    result = method(recs, *args, **kwargs)
+    return result.id if isinstance(args[0], Mapping) else result.ids
+
+
+def _call_kw_multi(method, self, args, kwargs):
     ids, args = args[0], args[1:]
     context, args, kwargs = split_context(method, args, kwargs)
     recs = self.with_context(context or {}).browse(ids)
@@ -680,13 +736,17 @@ def call_kw_multi(method, self, args, kwargs):
     result = method(recs, *args, **kwargs)
     return downgrade(method, result, recs, args, kwargs)
 
+
 def call_kw(model, name, args, kwargs):
     """ Invoke the given method ``name`` on the recordset ``model``. """
     method = getattr(type(model), name)
-    if getattr(method, '_api', None) == 'model':
-        return call_kw_model(method, model, args, kwargs)
+    api = getattr(method, '_api', None)
+    if api == 'model':
+        return _call_kw_model(method, model, args, kwargs)
+    elif api == 'model_create':
+        return _call_kw_model_create(method, model, args, kwargs)
     else:
-        return call_kw_multi(method, model, args, kwargs)
+        return _call_kw_multi(method, model, args, kwargs)
 
 
 class Environment(Mapping):
@@ -741,7 +801,7 @@ class Environment(Mapping):
         self.cr, self.uid, self.context = self.args = (cr, uid, frozendict(context))
         self.registry = Registry(cr.dbname)
         self.cache = envs.cache
-        self._protected = defaultdict(frozenset)    # {field: ids, ...}
+        self._protected = StackMap()                # {field: ids, ...}
         self.dirty = defaultdict(set)               # {record: set(field_name), ...}
         self.all = envs
         envs.add(self)
@@ -859,16 +919,23 @@ class Environment(Mapping):
         return self[field.model_name].browse(self._protected.get(field, ()))
 
     @contextmanager
-    def protecting(self, fields, records):
-        """ Prevent the invalidation or recomputation of ``fields`` on ``records``. """
-        saved = {}
+    def protecting(self, what, records=None):
+        """ Prevent the invalidation or recomputation of fields on records.
+            The parameters are either:
+             - ``what`` a collection of fields and ``records`` a recordset, or
+             - ``what`` a collection of pairs ``(fields, records)``.
+        """
+        protected = self._protected
         try:
-            for field in fields:
-                ids = saved[field] = self._protected[field]
-                self._protected[field] = ids.union(records._ids)
+            protected.pushmap()
+            what = what if records is None else [(what, records)]
+            for fields, records in what:
+                for field in fields:
+                    ids = protected.get(field, frozenset())
+                    protected[field] = ids.union(records._ids)
             yield
         finally:
-            self._protected.update(saved)
+            protected.popmap()
 
     def field_todo(self, field):
         """ Return a recordset with all records to recompute for ``field``. """
@@ -957,7 +1024,11 @@ class Cache(object):
     def get(self, record, field):
         """ Return the value of ``field`` for ``record``. """
         key = field.cache_key(record)
-        value = self._data[field][record.id][key]
+        try:
+            value = self._data[field][record.id][key]
+        except KeyError:
+            raise CacheMiss(record, field)
+
         return value.get() if isinstance(value, SpecialValue) else value
 
     def set(self, record, field, value):
@@ -1004,11 +1075,35 @@ class Cache(object):
 
     def get_records(self, model, field):
         """ Return the records of ``model`` that have a value for ``field``. """
-        browse = model.browse
-        ids = [record_id
-               for record_id, field_record_cache in self._data[field].items()
-               if field.cache_key(browse(record_id)) in field_record_cache]
-        return browse(ids)
+        key = field.cache_key(model)
+        # optimization: do not field.cache_key(record) for each record in cache
+        ids = [
+            record_id
+            for record_id, field_record_cache in self._data[field].items()
+            if key in field_record_cache
+        ]
+        return model.browse(ids)
+
+    def get_missing_ids(self, records, field):
+        """ Return the ids of ``records`` that have no value for ``field``. """
+        key = field.cache_key(records)
+        field_cache = self._data[field]
+        for record_id in records._ids:
+            if key not in field_cache.get(record_id, ()):
+                yield record_id
+
+    def copy(self, records, env):
+        """ Copy the cache of ``records`` to ``env``. """
+        src = records
+        dst = records.with_env(env)
+        for field, field_cache in self._data.items():
+            src_key = field.cache_key(src)
+            dst_key = field.cache_key(dst)
+            for record_cache in field_cache.values():
+                if src_key in record_cache and not isinstance(record_cache[src_key], SpecialValue):
+                    # But not if it's a SpecialValue, which often is an access error
+                    # because the other environment (eg. sudo()) is well expected to have access.
+                    record_cache[dst_key] = record_cache[src_key]
 
     def invalidate(self, spec=None):
         """ Invalidate the cache, partially or totally depending on ``spec``. """

@@ -2,12 +2,12 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
     'name': 'Online Proposals',
-    'category': 'Website',
-    'summary': 'Sales',
+    'category': 'Sales',
+    'summary': 'Build quotation templates',
     'website': 'https://www.odoo.com/page/quote-builder',
     'version': '1.0',
-    'description': "",
-    'depends': ['website', 'sale_management', 'mail', 'payment', 'website_mail'],
+    'description': "This module allows to create polished, professional proposals using templates. Templates come with default products, options, terms & conditions and confirmation methods (sign, pay).",
+    'depends': ['website', 'sale_management', 'mail', 'sale_payment', 'website_mail'],
     'data': [
         'data/website_quote_data.xml',
         'report/sale_order_reports.xml',

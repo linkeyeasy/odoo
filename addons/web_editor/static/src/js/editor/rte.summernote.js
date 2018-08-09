@@ -5,6 +5,7 @@ var ajax = require('web.ajax');
 var Class = require('web.Class');
 var core = require('web.core');
 var mixins = require('web.mixins');
+var base = require('web_editor.base');
 var weContext = require('web_editor.context');
 var rte = require('web_editor.rte');
 var weWidgets = require('web_editor.widget');
@@ -84,10 +85,6 @@ renderer.tplPopovers = function (lang, options) {
     var $linkPopover = $popover.find('.note-link-popover');
     var $airPopover = $popover.find('.note-air-popover');
 
-    if (window === window.top) {
-        $popover.children().addClass("hidden-xs");
-    }
-
     //////////////// image popover
 
     // add center button for images
@@ -103,11 +100,11 @@ renderer.tplPopovers = function (lang, options) {
     var $padding = $('<div class="btn-group"/>');
     $padding.insertBefore($imagePopover.find('.btn-group:first'));
     var dropdown_content = [
-        '<li><a data-event="padding" href="#" data-value="">'+_t('None')+'</a></li>',
-        '<li><a data-event="padding" href="#" data-value="small">'+_t('Small')+'</a></li>',
-        '<li><a data-event="padding" href="#" data-value="medium">'+_t('Medium')+'</a></li>',
-        '<li><a data-event="padding" href="#" data-value="large">'+_t('Large')+'</a></li>',
-        '<li><a data-event="padding" href="#" data-value="xl">'+_t('Xl')+'</a></li>',
+        '<li><a class="dropdown-item" data-event="padding" href="#" data-value="">'+_t('None')+'</a></li>',
+        '<li><a class="dropdown-item" data-event="padding" href="#" data-value="small">'+_t('Small')+'</a></li>',
+        '<li><a class="dropdown-item" data-event="padding" href="#" data-value="medium">'+_t('Medium')+'</a></li>',
+        '<li><a class="dropdown-item" data-event="padding" href="#" data-value="large">'+_t('Large')+'</a></li>',
+        '<li><a class="dropdown-item" data-event="padding" href="#" data-value="xl">'+_t('Xl')+'</a></li>',
     ];
     $(tplIconButton('fa fa-plus-square-o', {
         title: _t('Padding'),
@@ -120,10 +117,10 @@ renderer.tplPopovers = function (lang, options) {
         title: _t('Shadow'),
         event: 'imageShape',
         value: 'shadow'
-    })).insertAfter($imagePopover.find('[data-event="imageShape"][data-value="img-circle"]'));
+    })).insertAfter($imagePopover.find('[data-event="imageShape"][data-value="rounded-circle"]'));
 
     // add spin for fa
-    var $spin = $('<div class="btn-group hidden only_fa"/>').insertAfter($button.parent());
+    var $spin = $('<div class="btn-group d-none only_fa"/>').insertAfter($button.parent());
     $(tplIconButton('fa fa-refresh', {
             title: _t('Spin'),
             event: 'imageShape',
@@ -131,7 +128,7 @@ renderer.tplPopovers = function (lang, options) {
         })).appendTo($spin);
 
     // resize for fa
-    var $resizefa = $('<div class="btn-group hidden only_fa"/>')
+    var $resizefa = $('<div class="btn-group d-none only_fa"/>')
         .insertAfter($imagePopover.find('.btn-group:has([data-event="resize"])'));
     for (var size=1; size<=5; size++) {
         $(tplButton('<span class="note-fontsize-10">'+size+'x</span>', {
@@ -141,12 +138,12 @@ renderer.tplPopovers = function (lang, options) {
         })).appendTo($resizefa);
     }
     var $colorfa = $airPopover.find('.note-color').clone();
-    $colorfa.find("ul.dropdown-menu").css('min-width', '172px');
+    $colorfa.find(".dropdown-menu").css('min-width', '172px');
     $resizefa.after($colorfa);
 
     // show dialog box and delete
     var $imageprop = $('<div class="btn-group"/>');
-    $imageprop.appendTo($imagePopover.find('.popover-content'));
+    $imageprop.appendTo($imagePopover.find('.popover-body'));
     $(tplIconButton('fa fa-file-image-o', {
             title: _t('Edit'),
             event: 'showImageDialog'
@@ -156,17 +153,22 @@ renderer.tplPopovers = function (lang, options) {
             event: 'delete'
         })).appendTo($imageprop);
 
-    $imagePopover.find('.popover-content').append($airPopover.find(".note-history").clone());
+    $(tplIconButton('fa fa-crop', {
+        title: _t('Crop Image'),
+        event: 'cropImage',
+    })).insertAfter($imagePopover.find('[data-event="imageShape"][data-value="img-thumbnail"]'));
+
+    $imagePopover.find('.popover-body').append($airPopover.find(".note-history").clone());
 
     $imagePopover.find('[data-event="showImageDialog"]').before($airPopover.find('[data-event="showLinkDialog"]').clone());
 
     var $alt = $('<div class="btn-group"/>');
-    $alt.appendTo($imagePopover.find('.popover-content'));
-    $alt.append('<button class="btn btn-default btn-sm btn-small" data-event="alt"><strong>' + _t('Description') + ': </strong><span class="o_image_alt"/></button>');
+    $alt.appendTo($imagePopover.find('.popover-body'));
+    $alt.append('<button class="btn btn-secondary" data-event="alt"><strong>' + _t('Description') + ': </strong><span class="o_image_alt"/></button>');
 
     //////////////// link popover
 
-    $linkPopover.find('.popover-content').append($airPopover.find(".note-history").clone());
+    $linkPopover.find('.popover-body').append($airPopover.find(".note-history").clone());
 
     $linkPopover.find('button[data-event="showLinkDialog"] i').attr("class", "fa fa-link");
     $linkPopover.find('button[data-event="unlink"]').before($airPopover.find('button[data-event="showImageDialog"]').clone());
@@ -181,16 +183,16 @@ renderer.tplPopovers = function (lang, options) {
         while (node && (!node.tagName || (!node.tagName || formats.indexOf(node.tagName.toLowerCase()) === -1))) {
             node = node.parentNode;
         }
-        $format.parent().removeClass('active');
+        $format.removeClass('active');
         $format.filter('[data-value="'+(node ? node.tagName.toLowerCase() : "p")+'"]')
-            .parent().addClass("active");
+            .addClass("active");
     });
 
     //////////////// tooltip
 
     setTimeout(function () {
         $airPopover.add($linkPopover).add($imagePopover).find("button")
-            .tooltip('destroy')
+            .tooltip('dispose')
             .tooltip({
                 container: 'body',
                 trigger: 'hover',
@@ -206,27 +208,30 @@ eventHandler.modules.popover.button.update = function ($container, oStyle) {
     // stop animation when edit content
     var previous = $(".note-control-selection").data('target');
     if (previous) {
-        $(previous).css({"-webkit-animation-play-state": "", "animation-play-state": "", "-webkit-transition": "", "transition": "", "-webkit-animation": "", "animation": ""});
+        var $previous = $(previous);
+        $previous.css({"-webkit-animation-play-state": "", "animation-play-state": "", "-webkit-transition": "", "transition": "", "-webkit-animation": "", "animation": ""});
+        $previous.find('.o_we_selected_image').addBack('.o_we_selected_image').removeClass('o_we_selected_image');
     }
     // end
 
     fn_boutton_update.call(this, $container, oStyle);
 
-    $container.find('.note-color').removeClass("hidden");
+    $container.find('.note-color').removeClass('d-none');
 
     if (oStyle.image) {
-        $container.find('[data-event]').parent().removeClass("active");
+        $container.find('[data-event]').removeClass("active");
 
-        $container.find('a[data-event="padding"][data-value="small"]').parent().toggleClass("active", $(oStyle.image).hasClass("padding-small"));
-        $container.find('a[data-event="padding"][data-value="medium"]').parent().toggleClass("active", $(oStyle.image).hasClass("padding-medium"));
-        $container.find('a[data-event="padding"][data-value="large"]').parent().toggleClass("active", $(oStyle.image).hasClass("padding-large"));
-        $container.find('a[data-event="padding"][data-value="xl"]').parent().toggleClass("active", $(oStyle.image).hasClass("padding-xl"));
-        $container.find('a[data-event="padding"][data-value=""]').parent().toggleClass("active", !$container.find('.active a[data-event="padding"]').length);
+        $container.find('a[data-event="padding"][data-value="small"]').toggleClass("active", $(oStyle.image).hasClass("padding-small"));
+        $container.find('a[data-event="padding"][data-value="medium"]').toggleClass("active", $(oStyle.image).hasClass("padding-medium"));
+        $container.find('a[data-event="padding"][data-value="large"]').toggleClass("active", $(oStyle.image).hasClass("padding-large"));
+        $container.find('a[data-event="padding"][data-value="xl"]').toggleClass("active", $(oStyle.image).hasClass("padding-xl"));
+        $container.find('a[data-event="padding"][data-value=""]').toggleClass("active", !$container.find('.active a[data-event="padding"]').length);
+
+        $(oStyle.image).addClass('o_we_selected_image');
 
         if (dom.isImgFont(oStyle.image)) {
-
-            $container.find('.btn-group:not(.only_fa):has(button[data-event="resize"],button[data-value="img-thumbnail"])').addClass("hidden");
-            $container.find('.only_fa').removeClass("hidden");
+            $container.find('.btn-group:not(.only_fa):has(button[data-event="resize"],button[data-value="img-thumbnail"])').addClass('d-none');
+            $container.find('.only_fa').removeClass('d-none');
             $container.find('button[data-event="resizefa"][data-value="2"]').toggleClass("active", $(oStyle.image).hasClass("fa-2x"));
             $container.find('button[data-event="resizefa"][data-value="3"]').toggleClass("active", $(oStyle.image).hasClass("fa-3x"));
             $container.find('button[data-event="resizefa"][data-value="4"]').toggleClass("active", $(oStyle.image).hasClass("fa-4x"));
@@ -237,9 +242,8 @@ eventHandler.modules.popover.button.update = function ($container, oStyle) {
             $container.find('button[data-event="imageShape"][data-value="shadow"]').toggleClass("active", $(oStyle.image).hasClass("shadow"));
 
         } else {
-
-            $container.find('.hidden:not(.only_fa)').removeClass("hidden");
-            $container.find('.only_fa').addClass("hidden");
+            $container.find('.d-none:not(.only_fa)').removeClass('d-none');
+            $container.find('.only_fa').addClass('d-none');
             var width = ($(oStyle.image).attr('style') || '').match(/(^|;|\s)width:\s*([0-9]+%)/);
             if (width) {
                 width = width[2];
@@ -252,16 +256,15 @@ eventHandler.modules.popover.button.update = function ($container, oStyle) {
             $container.find('button[data-event="imageShape"][data-value="shadow"]').toggleClass("active", $(oStyle.image).hasClass("shadow"));
 
             if (!$(oStyle.image).is("img")) {
-                $container.find('.btn-group:has(button[data-event="imageShape"])').addClass("hidden");
+                $container.find('.btn-group:has(button[data-event="imageShape"])').addClass('d-none');
             }
 
-            $container.find('.note-color').addClass("hidden");
-
+            $container.find('.note-color').addClass('d-none');
         }
 
-        $container.find('button[data-event="floatMe"][data-value="left"]').toggleClass("active", $(oStyle.image).hasClass("pull-left"));
-        $container.find('button[data-event="floatMe"][data-value="center"]').toggleClass("active", $(oStyle.image).hasClass("center-block"));
-        $container.find('button[data-event="floatMe"][data-value="right"]').toggleClass("active", $(oStyle.image).hasClass("pull-right"));
+        $container.find('button[data-event="floatMe"][data-value="left"]').toggleClass("active", $(oStyle.image).hasClass("float-left"));
+        $container.find('button[data-event="floatMe"][data-value="center"]').toggleClass("active", $(oStyle.image).hasClass("d-block mx-auto"));
+        $container.find('button[data-event="floatMe"][data-value="right"]').toggleClass("active", $(oStyle.image).hasClass("float-right"));
 
         $(oStyle.image).trigger('attributes_change');
     }
@@ -353,9 +356,9 @@ eventHandler.modules.editor.floatMe = function ($editable, sValue) {
     var $target = $(getImgTarget($editable));
     $editable.data('NoteHistory').recordUndo();
     switch (sValue) {
-        case 'center': $target.toggleClass('center-block').removeClass('pull-right pull-left'); break;
-        case 'left': $target.toggleClass('pull-left').removeClass('pull-right center-block'); break;
-        case 'right': $target.toggleClass('pull-right').removeClass('pull-left center-block'); break;
+        case 'center': $target.toggleClass('d-block mx-auto').removeClass('float-right float-left'); break;
+        case 'left': $target.toggleClass('float-left').removeClass('float-right d-block mx-auto'); break;
+        case 'right': $target.toggleClass('float-right').removeClass('float-left d-block mx-auto'); break;
     }
 };
 eventHandler.modules.editor.imageShape = function ($editable, sValue) {
@@ -388,9 +391,16 @@ eventHandler.modules.imageDialog.showImageDialog = function ($editable) {
     if (r.sc.tagName && r.sc.childNodes.length) {
         r.sc = r.sc.childNodes[r.so];
     }
+    var media = $(r.sc).parents().addBack().filter(function (i, el) {
+        return dom.isImg(el);
+    })[0];
     core.bus.trigger('media_dialog_demand', {
         $editable: $editable,
-        media: dom.isImg(r.sc) ? r.sc : null,
+        media: media,
+        options: {
+            lastFilters: ['background'],
+            onUpload: $editable.data('callbacks').onUpload,
+        },
     });
     return new $.Deferred().reject();
 };
@@ -398,6 +408,14 @@ $.summernote.pluginEvents.alt = function (event, editor, layoutInfo, sorted) {
     var $editable = layoutInfo.editable();
     var $selection = layoutInfo.handle().find('.note-control-selection');
     core.bus.trigger('alt_dialog_demand', {
+        $editable: $editable,
+        media: $selection.data('target'),
+    });
+};
+$.summernote.pluginEvents.cropImage = function (event, editor, layoutInfo, sorted) {
+    var $editable = layoutInfo.editable();
+    var $selection = layoutInfo.handle().find('.note-control-selection');
+    core.bus.trigger('crop_image_dialog_demand', {
         $editable: $editable,
         media: $selection.data('target'),
     });
@@ -414,6 +432,9 @@ dom.isImg = function (node) {
 };
 var fn_is_forbidden_node = dom.isForbiddenNode || function () {};
 dom.isForbiddenNode = function (node) {
+    if (node.tagName === "BR") {
+        return false;
+    }
     return fn_is_forbidden_node(node) || $(node).is(".media_iframe_video");
 };
 var fn_is_img_font = dom.isImgFont || function () {};
@@ -424,8 +445,8 @@ dom.isImgFont = function (node) {
     var className = (node && node.className || "");
     if (node && (nodeName === "SPAN" || nodeName === "I") && className.length) {
         var classNames = className.split(/\s+/);
-        for (var k=0; k<weWidgets.fontIcons.length; k++) {
-            if (_.intersection(weWidgets.fontIcons[k].alias, classNames).length) {
+        for (var k=0; k<base.fontIcons.length; k++) {
+            if (_.intersection(base.fontIcons[k].alias, classNames).length) {
                 return true;
             }
         }
@@ -463,7 +484,7 @@ function prettify_html(html) {
             while (i--) space += '  ';
             return space;
         },
-        reg = /^<\/?(a|span|font|strong|u|i|strong|b)(\s|>)/i,
+        reg = /^<\/?(a|span|font|u|em|i|strong|b)(\s|>)/i,
         inline_level = Infinity,
         tokens = _.compact(_.flatten(_.map(html.split(/</), function (value) {
             value = value.replace(/\s+/g, ' ').split(/>/);
@@ -654,9 +675,17 @@ function summernote_mousedown(event) {
     }
 
     // restore range if range lost after clicking on non-editable area
-    r = range.create();
+    try {
+        r = range.create();
+    } catch (e) {
+        // If this code is running inside an iframe-editor and that the range
+        // is outside of this iframe, this will fail as the iframe does not have
+        // the permission to check the outside content this way. In that case,
+        // we simply ignore the exception as it is as if there was no range.
+        return;
+    }
     var editables = $(".o_editable[contenteditable], .note-editable[contenteditable]");
-    var r_editable = editables.has((r||{}).sc);
+    var r_editable = editables.has((r||{}).sc).addBack(editables.filter((r||{}).sc));
     if (!r_editable.closest('.note-editor').is($editable) && !r_editable.filter('.o_editable').is(editables)) {
         var saved_editable = editables.has((remember_selection||{}).sc);
         if ($editable.length && !saved_editable.closest('.o_editable, .note-editor').is($editable)) {
@@ -765,11 +794,6 @@ eventHandler.attach = function (oLayoutInfo, options) {
         eventHandler.modules.linkDialog.show(oLayoutInfo);
     });
 
-    if (oLayoutInfo.editor().is('[data-oe-model][data-oe-type="image"]')) {
-        oLayoutInfo.editor().on('click', 'img', function (event) {
-            $(event.target).trigger("dblclick");
-        });
-    }
     oLayoutInfo.editable().on('mousedown', function (e) {
         if (dom.isImg(e.target) && dom.isContentEditable(e.target)) {
             range.createFromNode(e.target).select();
@@ -778,6 +802,14 @@ eventHandler.attach = function (oLayoutInfo, options) {
     $(document).on("keyup", reRangeSelectKey);
 
     var clone_data = false;
+
+    if (options.model) {
+        oLayoutInfo.editable().data({'oe-model': options.model, 'oe-id': options.id});
+    }
+    if (options.getMediaDomain) {
+        oLayoutInfo.editable().data('oe-media-domain', options.getMediaDomain);
+    }
+
     var $node = oLayoutInfo.editor();
     if ($node.data('oe-model') || $node.data('oe-translation-id')) {
         $node.on('content_changed', function () {
@@ -859,7 +891,7 @@ eventHandler.attach = function (oLayoutInfo, options) {
                 if (!show_tooltip) return;
                 $target.tooltip({title: _t('Double-click to edit'), trigger: 'manuel', container: 'body'}).tooltip('show');
                 setTimeout(function () {
-                    $target.tooltip('destroy');
+                    $target.tooltip('dispose');
                 }, 800);
             }, 400);
         });
@@ -997,6 +1029,7 @@ var SummernoteManager = Class.extend(mixins.EventDispatcherMixin, {
         this.setParent(parent);
 
         core.bus.on('alt_dialog_demand', this, this._onAltDialogDemand);
+        core.bus.on('crop_image_dialog_demand', this, this._onCropImageDialogDemand);
         core.bus.on('link_dialog_demand', this, this._onLinkDialogDemand);
         core.bus.on('media_dialog_demand', this, this._onMediaDialogDemand);
     },
@@ -1007,6 +1040,7 @@ var SummernoteManager = Class.extend(mixins.EventDispatcherMixin, {
         mixins.EventDispatcherMixin.destroy.call(this);
 
         core.bus.off('alt_dialog_demand', this, this._onAltDialogDemand);
+        core.bus.off('crop_image_dialog_demand', this, this._onCropImageDialogDemand);
         core.bus.off('link_dialog_demand', this, this._onLinkDialogDemand);
         core.bus.off('media_dialog_demand', this, this._onMediaDialogDemand);
     },
@@ -1026,7 +1060,7 @@ var SummernoteManager = Class.extend(mixins.EventDispatcherMixin, {
             return;
         }
         data.__alreadyDone = true;
-        var altDialog = new weWidgets.alt(this,
+        var altDialog = new weWidgets.AltDialog(this,
             data.options || {},
             data.$editable,
             data.media
@@ -1038,6 +1072,34 @@ var SummernoteManager = Class.extend(mixins.EventDispatcherMixin, {
             altDialog.on('cancel', this, data.onCancel);
         }
         altDialog.open();
+    },
+
+    /**
+     * Called when a demand to open a crop dialog is received on the bus.
+     *
+     * @private
+     * @param {Object} data
+     */
+    _onCropImageDialogDemand: function (data) {
+        if (data.__alreadyDone) {
+            return;
+        }
+        data.__alreadyDone = true;
+        var cropImageDialog = new weWidgets.CropImageDialog(this,
+            _.extend({
+                res_model: data.$editable.data('oe-model'),
+                res_id: data.$editable.data('oe-id'),
+            }, data.options || {}),
+            data.$editable,
+            data.media
+        );
+        if (data.onSave) {
+            cropImageDialog.on('save', this, data.onSave);
+        }
+        if (data.onCancel) {
+            cropImageDialog.on('cancel', this, data.onCancel);
+        }
+        cropImageDialog.open();
     },
     /**
      * Called when a demand to open a link dialog is received on the bus.
@@ -1074,8 +1136,13 @@ var SummernoteManager = Class.extend(mixins.EventDispatcherMixin, {
             return;
         }
         data.__alreadyDone = true;
+
         var mediaDialog = new weWidgets.MediaDialog(this,
-            data.options || {},
+            _.extend({
+                res_model: data.$editable.data('oe-model'),
+                res_id: data.$editable.data('oe-id'),
+                domain: data.$editable.data('oe-media-domain'),
+            }, data.options),
             data.$editable,
             data.media
         );

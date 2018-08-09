@@ -8,6 +8,7 @@ from odoo.tools.safe_eval import safe_eval, test_python_expr
 from odoo.tools import pycompat
 from odoo.http import request
 
+import base64
 from collections import defaultdict
 import datetime
 import dateutil
@@ -33,6 +34,7 @@ class IrActions(models.Model):
     binding_model_id = fields.Many2one('ir.model', ondelete='cascade',
                                        help="Setting a value makes this action available in the sidebar for the given model.")
     binding_type = fields.Selection([('action', 'Action'),
+                                     ('action_form_only', "Form-only"),
                                      ('report', 'Report')],
                                     required=True, default='action')
 
@@ -41,9 +43,9 @@ class IrActions(models.Model):
         for record in self:
             record.xml_id = res.get(record.id)
 
-    @api.model
-    def create(self, vals):
-        res = super(IrActions, self).create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        res = super(IrActions, self).create(vals_list)
         # self.get_bindings() depends on action records
         self.clear_caches()
         return res
@@ -76,6 +78,8 @@ class IrActions(models.Model):
             'datetime': datetime,
             'dateutil': dateutil,
             'timezone': timezone,
+            'b64encode': base64.b64encode,
+            'b64decode': base64.b64decode,
         }
 
     @api.model
@@ -173,7 +177,7 @@ class IrActionsActWindow(models.Model):
                                  help="View type: Tree type to use for the tree view, set to 'tree' for a hierarchical tree view, or 'form' for a regular list view")
     usage = fields.Char(string='Action Usage',
                         help="Used to filter menu and home actions from the user form.")
-    view_ids = fields.One2many('ir.actions.act_window.view', 'act_window_id', string='Views')
+    view_ids = fields.One2many('ir.actions.act_window.view', 'act_window_id', string='No of Views')
     views = fields.Binary(compute='_compute_views',
                           help="This function field computes the ordered list of views that should be enabled " \
                                "when displaying the result of an action, federating view mode, views and " \
@@ -196,7 +200,12 @@ class IrActionsActWindow(models.Model):
             for values in result:
                 model = values.get('res_model')
                 if model in self.env:
-                    values['help'] = self.env[model].get_empty_list_help(values.get('help', ""))
+                    eval_ctx = dict(self.env.context)
+                    try:
+                        ctx = safe_eval(values.get('context', '{}'), eval_ctx)
+                    except:
+                        ctx = {}
+                    values['help'] = self.with_context(**ctx).env[model].get_empty_list_help(values.get('help', ''))
         return result
 
     @api.model
@@ -211,10 +220,10 @@ class IrActionsActWindow(models.Model):
         record = self.env.ref("%s.%s" % (module, xml_id))
         return record.read()[0]
 
-    @api.model
-    def create(self, vals):
+    @api.model_create_multi
+    def create(self, vals_list):
         self.clear_caches()
-        return super(IrActionsActWindow, self).create(vals)
+        return super(IrActionsActWindow, self).create(vals_list)
 
     @api.multi
     def unlink(self):
@@ -253,7 +262,7 @@ class IrActionsActWindowView(models.Model):
     _name = 'ir.actions.act_window.view'
     _table = 'ir_act_window_view'
     _rec_name = 'view_id'
-    _order = 'sequence'
+    _order = 'sequence,id'
 
     sequence = fields.Integer()
     view_id = fields.Many2one('ir.ui.view', string='View')
@@ -358,12 +367,12 @@ class IrActionsServer(models.Model):
                                    "based on the sequence. Low number means high priority.")
     model_id = fields.Many2one('ir.model', string='Model', required=True, ondelete='cascade',
                                help="Model on which the server action runs.")
-    model_name = fields.Char(related='model_id.model', readonly=True, store=True)
+    model_name = fields.Char(related='model_id.model', string='Model Name', readonly=True, store=True)
     # Python code
     code = fields.Text(string='Python Code', groups='base.group_system',
                        default=DEFAULT_PYTHON_CODE,
                        help="Write Python code that the action will execute. Some variables are "
-                            "available for use; help about pyhon expression is given in the help tab.")
+                            "available for use; help about python expression is given in the help tab.")
     # Multi
     child_ids = fields.Many2many('ir.actions.server', 'rel_server_actions', 'server_id', 'action_id',
                                  string='Child Actions', help='Child server actions that will be executed. Note that the last return returned action value will be used as global return value.')
@@ -372,7 +381,7 @@ class IrActionsServer(models.Model):
                                     oldname='srcmodel_id', help="Model for record creation / update. Set this field only to specify a different model than the base model.")
     crud_model_name = fields.Char(related='crud_model_id.name', readonly=True)
     link_field_id = fields.Many2one('ir.model.fields', string='Link using field',
-                                    help="Provide the field used to link the newly created record"
+                                    help="Provide the field used to link the newly created record "
                                          "on the record on used by the server action.")
     fields_lines = fields.One2many('ir.server.object.lines', 'server_id', string='Value Mapping', copy=True)
 
@@ -442,7 +451,12 @@ class IrActionsServer(models.Model):
         for exp in action.fields_lines:
             res[exp.col1.name] = exp.eval_value(eval_context=eval_context)[exp.id]
 
-        self.env[action.model_id.model].browse(self._context.get('active_id')).write(res)
+        if self._context.get('onchange_self'):
+            record_cached = self._context['onchange_self']
+            for field, new_value in res.items():
+                record_cached[field] = new_value
+        else:
+            self.env[action.model_id.model].browse(self._context.get('active_id')).write(res)
 
     @api.model
     def run_action_object_create(self, action, eval_context=None):
@@ -537,6 +551,8 @@ class IrActionsServer(models.Model):
 
             elif hasattr(self, 'run_action_%s' % action.state):
                 active_id = self._context.get('active_id')
+                if not active_id and self._context.get('onchange_self'):
+                    active_id = self._context['onchange_self']._origin.id
                 active_ids = self._context.get('active_ids', [active_id] if active_id else [])
                 for active_id in active_ids:
                     # run context dedicated to a particular active_id
@@ -567,7 +583,42 @@ class IrServerObjectLines(models.Model):
                                             "When Formula type is selected, this field may be a Python expression "
                                             " that can use the same values as for the code field on the server action.\n"
                                             "If Value type is selected, the value will be used directly without evaluation.")
-    type = fields.Selection([('value', 'Value'), ('equation', 'Python expression')], 'Evaluation Type', default='value', required=True, change_default=True)
+    type = fields.Selection([
+        ('value', 'Value'),
+        ('reference', 'Reference'),
+        ('equation', 'Python expression')
+    ], 'Evaluation Type', default='value', required=True, change_default=True)
+    resource_ref = fields.Reference(
+        string='Record', selection='_selection_target_model',
+        compute='_compute_resource_ref', inverse='_set_resource_ref')
+
+    @api.model
+    def _selection_target_model(self):
+        models = self.env['ir.model'].search([])
+        return [(model.model, model.name) for model in models]
+
+    @api.depends('col1.relation', 'value', 'type')
+    def _compute_resource_ref(self):
+        for line in self:
+            if line.type in ['reference', 'value'] and line.col1 and line.col1.relation:
+                value = line.value or ''
+                try:
+                    value = int(value)
+                    if not self.env[line.col1.relation].browse(value).exists():
+                        record = self.env[line.col1.relation]._search([], limit=1)
+                        value = record[0] if record else 0
+                except ValueError:
+                    record = self.env[line.col1.relation]._search([], limit=1)
+                    value = record[0] if record else 0
+                line.resource_ref = '%s,%s' % (line.col1.relation, value)
+            else:
+                line.resource_ref = False
+
+    @api.onchange('resource_ref')
+    def _set_resource_ref(self):
+        for line in self.filtered(lambda line: line.type == 'reference'):
+            if line.resource_ref:
+                line.value = str(line.resource_ref.id)
 
     @api.multi
     def eval_value(self, eval_context=None):
@@ -598,12 +649,13 @@ class IrActionsTodo(models.Model):
     state = fields.Selection([('open', 'To Do'), ('done', 'Done')], string='Status', default='open', required=True)
     name = fields.Char()
 
-    @api.model
-    def create(self, vals):
-        todo = super(IrActionsTodo, self).create(vals)
-        if todo.state == "open":
-            self.ensure_one_open_todo()
-        return todo
+    @api.model_create_multi
+    def create(self, vals_list):
+        todos = super(IrActionsTodo, self).create(vals_list)
+        for todo in todos:
+            if todo.state == "open":
+                self.ensure_one_open_todo()
+        return todos
 
     @api.multi
     def write(self, vals):
@@ -636,26 +688,27 @@ class IrActionsTodo(models.Model):
         return super(IrActionsTodo, self).unlink()
 
     @api.model
-    def name_search(self, name, args=None, operator='ilike', limit=100):
+    def _name_search(self, name, args=None, operator='ilike', limit=100, name_get_uid=None):
         if args is None:
             args = []
         if name:
-            actions = self.search([('action_id', operator, name)] + args, limit=limit)
-            return actions.name_get()
-        return super(IrActionsTodo, self).name_search(name, args=args, operator=operator, limit=limit)
+            action_ids = self._search([('action_id', operator, name)] + args, limit=limit, access_rights_uid=name_get_uid)
+            return self.browse(action_ids).name_get()
+        return super(IrActionsTodo, self)._name_search(name, args=args, operator=operator, limit=limit, name_get_uid=name_get_uid)
 
     @api.multi
-    def action_launch(self, context=None):
+    def action_launch(self):
         """ Launch Action of Wizard"""
         self.ensure_one()
 
         self.write({'state': 'done'})
 
         # Load action
-        action = self.env[self.action_id.type].browse(self.action_id.id)
+        action_type = self.action_id.type
+        action = self.env[action_type].browse(self.action_id.id)
 
         result = action.read()[0]
-        if action._name != 'ir.actions.act_window':
+        if action_type != 'ir.actions.act_window':
             return result
         result.setdefault('context', '{}')
 
@@ -695,7 +748,7 @@ class IrActionsActClient(models.Model):
     res_model = fields.Char(string='Destination Model', help="Optional model, mostly used for needactions.")
     context = fields.Char(string='Context Value', default="{}", required=True, help="Context dictionary as Python expression, empty by default (Default: {})")
     params = fields.Binary(compute='_compute_params', inverse='_inverse_params', string='Supplementary arguments',
-                           help="Arguments sent to the client along with"
+                           help="Arguments sent to the client along with "
                                 "the view tag")
     params_store = fields.Binary(string='Params storage', readonly=True)
 

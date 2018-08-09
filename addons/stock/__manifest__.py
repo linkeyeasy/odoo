@@ -2,9 +2,9 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 {
-    'name': 'Inventory Management',
+    'name': 'Inventory',
     'version': '1.1',
-    'summary': 'Inventory, Logistics, Warehousing',
+    'summary': 'Manage your stock and logistics activities',
     'description': "",
     'website': 'https://www.odoo.com/page/warehouse',
     'depends': ['product', 'barcodes'],
@@ -18,7 +18,6 @@
         'data/stock_demo2.xml',
         'data/stock_location_demo_cpu1.xml',
         'data/stock_location_demo_cpu3.xml',
-        'data/stock_quant_demo.xml',
     ],
     'data': [
         'security/stock_security.xml',
@@ -44,10 +43,11 @@
         'wizard/stock_overprocessed_transfer_views.xml',
         'wizard/stock_quantity_history.xml',
         'wizard/stock_warn_insufficient_qty_views.xml',
+        'wizard/product_replenish_views.xml',
+        'wizard/stock_track_confirmation_views.xml',
 
         'views/res_partner_views.xml',
         'views/product_strategy_views.xml',
-        'views/stock_incoterms_views.xml',
         'views/stock_production_lot_views.xml',
         'views/stock_picking_views.xml',
         'views/stock_scrap_views.xml',
@@ -61,11 +61,12 @@
         'views/res_config_settings_views.xml',
         'views/report_stock_traceability.xml',
         'views/stock_template.xml',
-        'views/procurement_views.xml',
+        'views/stock_rule_views.xml',
+        'views/res_users_views.xml',
+        'views/stock_package_level_views.xml',
 
         'data/default_barcode_patterns.xml',
         'data/stock_data.xml',
-        'data/stock_incoterms_data.xml',
         'data/stock_sequence_data.xml',
     ],
     'qweb': [
@@ -74,4 +75,5 @@
     'installable': True,
     'application': True,
     'auto_install': False,
+    'pre_init_hook': 'pre_init_hook',
 }

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from odoo import http
+from odoo import fields, http
 from odoo.http import request
 from odoo.addons.website_sale.controllers.main import WebsiteSale
 
@@ -34,8 +34,8 @@ class WebsiteSaleOptions(WebsiteSale):
         if add_qty or set_qty:
             value = order._cart_update(
                 product_id=int(product_id),
-                add_qty=int(add_qty),
-                set_qty=int(set_qty),
+                add_qty=add_qty,
+                set_qty=set_qty,
                 attributes=attributes,
                 optional_product_ids=optional_product_ids
             )
@@ -63,7 +63,10 @@ class WebsiteSaleOptions(WebsiteSale):
 
         from_currency = request.env.user.company_id.currency_id
         to_currency = pricelist.currency_id
-        compute_currency = lambda price: request.env['res.currency']._compute(from_currency, to_currency, price)
+        company = request.env['res.company'].browse(request.env.context.get('company_id')) or request.env['res.users']._get_company()
+        date = request.env.context.get('date') or fields.Date.today()
+        compute_currency = lambda price: from_currency._convert(
+            price, to_currency, company, date)
         product = request.env['product.product'].with_context(product_context).browse(int(product_id))
 
         main_product_attr_ids = self.get_attribute_value_ids(product)
