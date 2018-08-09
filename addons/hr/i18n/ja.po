@@ -4,17 +4,17 @@
 # 
 # Translators:
 # Yoshi Tashiro <tashiro@roomsfor.hk>, 2017
-# Martin Trigaux <mat@odoo.com>, 2017
-# Norimichi Sugimoto <norimichi.sugimoto@tls-ltd.co.jp>, 2017
+# Martin Trigaux, 2017
 # Manami Hashi <manami@roomsfor.hk>, 2017
+# Norimichi Sugimoto <norimichi.sugimoto@tls-ltd.co.jp>, 2017
 # 高木正勝 <masakatsu.takagi@pro-spire.co.jp>, 2017
 # NOKA Shigekazu <shigekazu.noka@gmail.com>, 2017
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.saas~18\n"
+"Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-02 11:26+0000\n"
-"PO-Revision-Date: 2017-10-02 11:26+0000\n"
+"POT-Creation-Date: 2018-02-19 13:43+0000\n"
+"PO-Revision-Date: 2018-02-19 13:43+0000\n"
 "Last-Translator: NOKA Shigekazu <shigekazu.noka@gmail.com>, 2017\n"
 "Language-Team: Japanese (https://www.transifex.com/odoo/teams/41243/ja/)\n"
 "MIME-Version: 1.0\n"
@@ -256,7 +256,7 @@ msgstr "会社"
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_res_config_settings_resource_calendar_id
 msgid "Company Working Hours"
-msgstr ""
+msgstr "会社就業時間"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_department_complete_name
@@ -267,11 +267,6 @@ msgstr "完全な名前"
 #: model:ir.ui.menu,name:hr.menu_human_resources_configuration
 msgid "Configuration"
 msgstr "設定"
-
-#. module: hr
-#: model:ir.actions.act_window,name:hr.hr_config_settings_action
-msgid "Configure HR"
-msgstr ""
 
 #. module: hr
 #: model:hr.job,name:hr.job_consultant
@@ -414,6 +409,7 @@ msgstr "従業員名"
 #: model:ir.ui.menu,name:hr.menu_hr_root
 #: model:ir.ui.menu,name:hr.menu_open_view_employee_list_my
 #: model:ir.ui.view,arch_db:hr.hr_department_view_kanban
+#: model:ir.ui.view,arch_db:hr.res_config_settings_view_form
 #: model:ir.ui.view,arch_db:hr.view_employee_filter
 #: model:ir.ui.view,arch_db:hr.view_employee_tree
 #: model:ir.ui.view,arch_db:hr.view_partner_tree2
@@ -921,17 +917,12 @@ msgstr "1年程度の経験者厚遇"
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee_address_home_id
 msgid "Private Address"
-msgstr ""
+msgstr "個人アドレス"
 
 #. module: hr
 #: model:ir.ui.view,arch_db:hr.view_employee_form
 msgid "Private Information"
-msgstr ""
-
-#. module: hr
-#: model:ir.ui.view,arch_db:hr.res_config_settings_view_form
-msgid "Prout prout prout"
-msgstr ""
+msgstr "個人情報"
 
 #. module: hr
 #: model:hr.job,website_description:hr.job_consultant
@@ -1011,7 +1002,7 @@ msgstr "世界中にイベント組織を拡大"
 msgid ""
 "Set default calendar used to compute time allocation for leaves, timesheets,"
 " ..."
-msgstr ""
+msgstr "休暇申請やタイムシート等の時間割当に使用するデフォルトカレンダを設定"
 
 #. module: hr
 #: model:ir.model.fields,help:hr.field_hr_job_state
@@ -1020,6 +1011,7 @@ msgid ""
 msgstr "本職位の採用プロセスが有効か無効かを設定する"
 
 #. module: hr
+#: model:ir.actions.act_window,name:hr.hr_config_settings_action
 #: model:ir.ui.menu,name:hr.hr_menu_configuration
 #: model:ir.ui.view,arch_db:hr.hr_department_view_kanban
 msgid "Settings"
@@ -1028,7 +1020,7 @@ msgstr "管理設定"
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_res_config_settings_module_hr_org_chart
 msgid "Show Organizational Chart"
-msgstr ""
+msgstr "組織図を表示"
 
 #. module: hr
 #: model:ir.ui.view,arch_db:hr.res_config_settings_view_form
@@ -1038,7 +1030,7 @@ msgstr ""
 #. module: hr
 #: model:ir.ui.view,arch_db:hr.res_config_settings_view_form
 msgid "Show organizational chart on employee form."
-msgstr ""
+msgstr "従業員フォームに組織図を表示"
 
 #. module: hr
 #: selection:hr.employee,marital:0
@@ -1292,7 +1284,7 @@ msgstr ""
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee_address_id
 msgid "Work Address"
-msgstr ""
+msgstr "職場アドレス"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee_work_email
@@ -1302,7 +1294,7 @@ msgstr "勤務先Eメール"
 #. module: hr
 #: model:ir.ui.view,arch_db:hr.view_employee_form
 msgid "Work Information"
-msgstr ""
+msgstr "職場関連情報"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee_work_location
@@ -1317,7 +1309,7 @@ msgstr "会社の携帯"
 #. module: hr
 #: model:ir.ui.view,arch_db:hr.res_config_settings_view_form
 msgid "Work Organization"
-msgstr ""
+msgstr "職場組織"
 
 #. module: hr
 #: model:ir.ui.view,arch_db:hr.view_employee_form

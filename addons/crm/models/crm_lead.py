@@ -236,6 +236,8 @@ class Lead(models.Model):
     @api.model
     def _onchange_user_values(self, user_id):
         """ returns new values when user_id has changed """
+        if not user_id:
+            return {}
         if user_id and self._context.get('team_id'):
             team = self.env['crm.team'].browse(self._context['team_id'])
             if user_id in team.member_ids.ids:
@@ -440,7 +442,8 @@ class Lead(models.Model):
             'res_id': self.id,
             'views': [(form_view.id, 'form'),],
             'type': 'ir.actions.act_window',
-            'target': 'inline'
+            'target': 'inline',
+            'context': {'default_type': 'opportunity'}
         }
 
     # ----------------------------------------
@@ -542,7 +545,8 @@ class Lead(models.Model):
         for field in fields:
             value = getattr(self, field.name, False)
             if field.ttype == 'selection':
-                value = dict(field.get_values(self.env)).get(value, value)
+                selections = self.fields_get()[field.name]['selection']
+                value = next((v[1] for v in selections if v[0] == value), value)
             elif field.ttype == 'many2one':
                 if value:
                     value = value.sudo().name_get()[0][1]
@@ -968,6 +972,8 @@ class Lead(models.Model):
             'nb_opportunities': 0,
         }
 
+        today = fields.Date.from_string(fields.Date.context_today(self))
+
         opportunities = self.search([('type', '=', 'opportunity'), ('user_id', '=', self._uid)])
 
         for opp in opportunities:
@@ -975,28 +981,28 @@ class Lead(models.Model):
             if opp.activity_date_deadline:
                 if opp.date_deadline:
                     date_deadline = fields.Date.from_string(opp.date_deadline)
-                    if date_deadline == date.today():
+                    if date_deadline == today:
                         result['closing']['today'] += 1
-                    if date.today() <= date_deadline <= date.today() + timedelta(days=7):
+                    if today <= date_deadline <= today + timedelta(days=7):
                         result['closing']['next_7_days'] += 1
-                    if date_deadline < date.today() and not opp.date_closed:
+                    if date_deadline < today and not opp.date_closed:
                         result['closing']['overdue'] += 1
                 # Next activities
                 for activity in opp.activity_ids:
                     date_deadline = fields.Date.from_string(activity.date_deadline)
-                    if date_deadline == date.today():
+                    if date_deadline == today:
                         result['activity']['today'] += 1
-                    if date.today() <= date_deadline <= date.today() + timedelta(days=7):
+                    if today <= date_deadline <= today + timedelta(days=7):
                         result['activity']['next_7_days'] += 1
-                    if date_deadline < date.today() and not opp.date_closed:
+                    if date_deadline < today:
                         result['activity']['overdue'] += 1
             # Won in Opportunities
             if opp.date_closed and opp.stage_id.probability == 100:
                 date_closed = fields.Date.from_string(opp.date_closed)
-                if date.today().replace(day=1) <= date_closed <= date.today():
+                if today.replace(day=1) <= date_closed <= today:
                     if opp.planned_revenue:
                         result['won']['this_month'] += opp.planned_revenue
-                elif  date.today() + relativedelta(months=-1, day=1) <= date_closed < date.today().replace(day=1):
+                elif  today + relativedelta(months=-1, day=1) <= date_closed < today.replace(day=1):
                     if opp.planned_revenue:
                         result['won']['last_month'] += opp.planned_revenue
 
@@ -1021,9 +1027,9 @@ class Lead(models.Model):
         for activity in activites_done:
             if activity['date']:
                 date_act = fields.Date.from_string(activity['date'])
-                if date.today().replace(day=1) <= date_act <= date.today():
+                if today.replace(day=1) <= date_act <= today:
                     result['done']['this_month'] += 1
-                elif date.today() + relativedelta(months=-1, day=1) <= date_act < date.today().replace(day=1):
+                elif today + relativedelta(months=-1, day=1) <= date_act < today.replace(day=1):
                     result['done']['last_month'] += 1
 
         # Meetings
@@ -1038,9 +1044,9 @@ class Lead(models.Model):
         for meeting in meetings:
             if meeting['start']:
                 start = datetime.strptime(meeting['start'], tools.DEFAULT_SERVER_DATETIME_FORMAT).date()
-                if start == date.today():
+                if start == today:
                     result['meeting']['today'] += 1
-                if date.today() <= start <= date.today() + timedelta(days=7):
+                if today <= start <= today + timedelta(days=7):
                     result['meeting']['next_7_days'] += 1
 
         result['done']['target'] = self.env.user.target_sales_done

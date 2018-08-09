@@ -3,19 +3,21 @@
 # * website
 # 
 # Translators:
-# Martin Trigaux <mat@odoo.com>, 2017
+# Martin Trigaux, 2017
 # Ahto Reinaru <ahto.reinaru@gmail.com>, 2017
 # Arma Gedonsky <armagedonsky@hot.ee>, 2017
 # Rivo Zängov <eraser@eraser.ee>, 2017
+# Eneli Õigus <enelioigus@gmail.com>, 2017
 # Egon Raamat <egon@avalah.ee>, 2017
 # Wanradt Koell <wanradt@gmail.com>, 2017
+# Marek Pontus, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-16 08:08+0000\n"
-"PO-Revision-Date: 2017-11-16 08:08+0000\n"
-"Last-Translator: Wanradt Koell <wanradt@gmail.com>, 2017\n"
+"POT-Creation-Date: 2018-02-19 13:42+0000\n"
+"PO-Revision-Date: 2018-02-19 13:42+0000\n"
+"Last-Translator: Marek Pontus, 2018\n"
 "Language-Team: Estonian (https://www.transifex.com/odoo/teams/41243/et/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,7 +30,7 @@ msgstr ""
 #: code:addons/website/static/src/js/editor/snippets.options.js:724
 #, python-format
 msgid " Add Images"
-msgstr ""
+msgstr "Lisa pilte"
 
 #. module: website
 #: code:addons/website/models/website.py:233
@@ -40,7 +42,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.show_website_info
 msgid "&amp;times;"
-msgstr ""
+msgstr "&amp;korda;"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.sitemap_index_xml
@@ -65,7 +67,7 @@ msgstr "&nbsp;"
 #: code:addons/website/static/src/xml/website.gallery.xml:51
 #, python-format
 msgid "&times;"
-msgstr ""
+msgstr "&korda;"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.edit_website_pages
@@ -78,7 +80,7 @@ msgstr ""
 #: code:addons/website/models/website.py:743
 #, python-format
 msgid "(copy)"
-msgstr ""
+msgstr "(kopeeri)"
 
 #. module: website
 #. openerp-web
@@ -92,6 +94,13 @@ msgstr ""
 msgid ""
 "(e.g. business name, location) tends to improve your ranking in search "
 "engines and consequently increases your traffic. Do it:"
+msgstr ""
+
+#. module: website
+#: model:ir.ui.view,arch_db:website.layout_footer_copyright
+msgid ""
+",\n"
+"                                                      the #1"
 msgstr ""
 
 #. module: website
@@ -114,7 +123,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
 msgid "- The Odoo Team"
-msgstr ""
+msgstr "- Odoo tiim"
 
 #. module: website
 #. openerp-web
@@ -128,22 +137,22 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.default_csv
 msgid "1,2,3"
-msgstr ""
+msgstr "1,2,3"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "10s"
-msgstr ""
+msgstr "10s"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "12"
-msgstr ""
+msgstr "12"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "1s"
-msgstr ""
+msgstr "1s"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_comparisons
@@ -153,12 +162,12 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "2s"
-msgstr ""
+msgstr "2s"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "3s"
-msgstr ""
+msgstr "3s"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.403
@@ -173,7 +182,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "5s"
-msgstr ""
+msgstr "5s"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_big_picture
@@ -245,7 +254,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "<b>Set Custom Image...</b>"
-msgstr ""
+msgstr "<b>Määra kohandatud pilt ...</b>"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -277,7 +286,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippets
 msgid "<i class=\"fa fa-diamond\"/> Feature"
-msgstr ""
+msgstr "<i class=\"fa fa-diamond\"/> Funktsioon"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
@@ -287,7 +296,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "<i class=\"fa fa-eyedropper\"/>Background Color"
-msgstr ""
+msgstr "<i class=\"fa fa-eyedropper\"/>Taustavärv"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
@@ -302,7 +311,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippets
 msgid "<i class=\"fa fa-magic icon-fix\"/> Effect"
-msgstr ""
+msgstr "<i class=\"fa fa-magic icon-fix\"/> Efekt"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
@@ -330,16 +339,18 @@ msgid ""
 "<i class=\"fa fa-plus-circle\"/>\n"
 "                Add a language..."
 msgstr ""
+"<i class=\"fa fa-plus-circle\"/>\n"
+"                Lisa keel ..."
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "<i class=\"fa fa-plus-circle\"/>Add Slide"
-msgstr ""
+msgstr "<i class=\"fa fa-plus-circle\"/>Lisa slaid"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "<i class=\"fa fa-plus-circle\"/>Add images"
-msgstr ""
+msgstr "<i class=\"fa fa-plus-circle\"/>Lisa pilte"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
@@ -354,22 +365,22 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippets
 msgid "<i class=\"fa fa-th-large\"/> Structure"
-msgstr ""
+msgstr "<i class=\"fa fa-th-large\"/> Struktuur"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.user_navbar
 msgid "<i class=\"fa fa-th-large\"/> WEBSITE <b class=\"caret\"/>"
-msgstr ""
+msgstr "<i class=\"fa fa-th-large\"/> VEEBILEHT <b class=\"caret\"/>"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "<i class=\"fa fa-trash\"/>Remove all images"
-msgstr ""
+msgstr "<i class=\"fa fa-trash\"/>Eemalda kõik pildid"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "<i class=\"fa fa-trash-o\"/>Remove Slide"
-msgstr ""
+msgstr "<i class=\"fa fa-trash-o\"/>Eemalda slaid"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -448,7 +459,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
 msgid "<span class=\"fa fa-arrow-circle-o-down\"/> Install now"
-msgstr ""
+msgstr "<span class=\"fa fa-arrow-circle-o-down\"/> Installeeri kohe"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -460,12 +471,12 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.user_navbar
 msgid "<span class=\"fa fa-pencil\"/>Edit"
-msgstr ""
+msgstr "<span class=\"fa fa-pencil\"/>Muuda"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.user_navbar
 msgid "<span class=\"fa fa-plus\"/>New"
-msgstr ""
+msgstr "<span class=\"fa fa-plus\"/>Uus"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_image_gallery
@@ -473,6 +484,8 @@ msgid ""
 "<span class=\"o_add_images\" style=\"cursor: pointer;\"><i class=\"fa fa-"
 "plus-circle\"/> Add Images</span>"
 msgstr ""
+"<span class=\"o_add_images\" style=\"cursor: pointer;\"><i class=\"fa fa-"
+"plus-circle\"/> Lisa pilte</span>"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -534,7 +547,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_share
 msgid "<span>Share</span>"
-msgstr ""
+msgstr "<span>Jaga</span>"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -657,7 +670,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
 msgid "<strong>Next actions:</strong>"
-msgstr ""
+msgstr "<strong>Järgmised tegevused:</strong>"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -769,6 +782,10 @@ msgid ""
 "field as True to allow users to run this action. If it is set to False the "
 "action cannot be run through the website."
 msgstr ""
+"Koodiserveri toimingut saab teostada internetilehel, kasutades spetsiaalset "
+"kontrollerit. Internetilehe aadress on <base>/website/action/<website_path>."
+" Aktiveerige see väli, et kasutaja saaks teha seda toimingut. Kui väli on "
+"mitteaktiivne, siis toimingut ei saa veebisaidi kaudu käivitada."
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_text_block
@@ -795,7 +812,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.res_config_settings_view_form
 msgid "API Key"
-msgstr ""
+msgstr "API võti"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.aboutus
@@ -803,7 +820,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:website.footer_default
 #: model:website.page,arch_db:website.aboutus_page
 msgid "About us"
-msgstr ""
+msgstr "Meist"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_comparisons
@@ -841,7 +858,7 @@ msgstr "Lisa"
 #: code:addons/website/static/src/xml/website.contentMenu.xml:49
 #, python-format
 msgid "Add Menu Entry"
-msgstr ""
+msgstr "Lisa menüükirje"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_feature_grid
@@ -860,7 +877,7 @@ msgstr "Lisa menüüse lehekülg"
 #: code:addons/website/static/src/xml/website.backend.xml:55
 #, python-format
 msgid "Add this feature"
-msgstr ""
+msgstr "Lisa see funktsioon"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -897,7 +914,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_company_team
 msgid "Aline Turner, CTO"
-msgstr ""
+msgstr "Aline Turner, CTO"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_company_team
@@ -974,7 +991,7 @@ msgstr ""
 #. module: website
 #: model:ir.model.fields,field_description:website.field_ir_attachment_website_url
 msgid "Attachment URL"
-msgstr ""
+msgstr "Manuse URL"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -1086,7 +1103,7 @@ msgstr "Loobu"
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_feature_grid
 msgid "Change Background"
-msgstr ""
+msgstr "Muuda tausta"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_feature_grid
@@ -1106,7 +1123,7 @@ msgstr ""
 #. module: website
 #: model:ir.model.fields,field_description:website.field_website_page_field_parent
 msgid "Child Field"
-msgstr "Tütarväli"
+msgstr "Alamväli"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_website_menu_child_id
@@ -1211,14 +1228,14 @@ msgstr ""
 #. module: website
 #: model:ir.ui.menu,name:website.menu_website_global_configuration
 msgid "Configuration"
-msgstr "Seadistus"
+msgstr "Seadistused"
 
 #. module: website
 #. openerp-web
 #: code:addons/website/static/src/js/editor/snippets.options.js:24
 #, python-format
 msgid "Confirmation"
-msgstr ""
+msgstr "Kinnitus"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -1239,7 +1256,7 @@ msgstr "Kontakt"
 #: model:ir.ui.view,arch_db:website.403 model:ir.ui.view,arch_db:website.404
 #: model:ir.ui.view,arch_db:website.res_config_settings_view_form
 msgid "Contact Us"
-msgstr ""
+msgstr "Võta meiega ühendust"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.contactus
@@ -1311,11 +1328,6 @@ msgid "Create Page"
 msgstr ""
 
 #. module: website
-#: model:ir.ui.view,arch_db:website.layout_footer_copyright
-msgid "Create a"
-msgstr ""
-
-#. module: website
 #: model:ir.ui.view,arch_db:website.res_config_settings_view_form
 msgid "Create a Google Project and Get a Key"
 msgstr ""
@@ -1344,7 +1356,7 @@ msgstr "Loonud"
 #: model:ir.model.fields,field_description:website.field_website_page_create_date
 #: model:ir.model.fields,field_description:website.field_website_redirect_create_date
 msgid "Created on"
-msgstr "Loodud"
+msgstr "Loomise kuupäev"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
@@ -1354,12 +1366,12 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.user_navbar
 msgid "Customize"
-msgstr ""
+msgstr "Kohanda"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.user_navbar
 msgid "Customize Theme"
-msgstr ""
+msgstr "Kohanda teemat"
 
 #. module: website
 #. openerp-web
@@ -1384,17 +1396,17 @@ msgstr "Vaikimisi"
 #. module: website
 #: model:ir.ui.view,arch_db:website.res_config_settings_view_form
 msgid "Default Access Rights"
-msgstr ""
+msgstr "Vaikimis ligipääsu õigused"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_website_default_lang_id
 msgid "Default Language"
-msgstr ""
+msgstr "Vaikimisi keel"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_res_config_settings_default_lang_id
 msgid "Default language"
-msgstr ""
+msgstr "Vaikimisi keel"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_res_config_settings_default_lang_code
@@ -1412,14 +1424,14 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_feature_grid
 msgid "Delete Blocks"
-msgstr ""
+msgstr "Kustuta blokid"
 
 #. module: website
 #. openerp-web
 #: code:addons/website/static/src/js/menu/content.js:741
 #, python-format
 msgid "Delete Page"
-msgstr ""
+msgstr "Kustuta lehekülg"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_three_columns
@@ -1432,12 +1444,12 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.edit_website_pages
 msgid "Delete this page"
-msgstr ""
+msgstr "Kustuta see lehekülg"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_references
 msgid "Demo Logo"
-msgstr ""
+msgstr "Demo logo"
 
 #. module: website
 #. openerp-web
@@ -1457,7 +1469,7 @@ msgstr "Kirjeldus"
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
 msgid "Design"
-msgstr ""
+msgstr "Disain"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
@@ -1480,7 +1492,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.external_snippets
 msgid "Discussion Group"
-msgstr "Arutelu Grupp"
+msgstr "Vestlusgrupp"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_website_display_name
@@ -1507,7 +1519,7 @@ msgstr "Domeen"
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
 msgid "Domain Name"
-msgstr ""
+msgstr "Domeeninimi"
 
 #. module: website
 #. openerp-web
@@ -1584,7 +1596,7 @@ msgstr "Muuda"
 #: model:ir.ui.view,arch_db:website.user_navbar
 #, python-format
 msgid "Edit Menu"
-msgstr ""
+msgstr "Muuda menüüd"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.user_navbar
@@ -1594,13 +1606,13 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.edit_website_pages
 msgid "Edit code in backend"
-msgstr ""
+msgstr "Muuda koodi adminiliideses"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.publish_management
 #: model:ir.ui.view,arch_db:website.user_navbar
 msgid "Edit in backend"
-msgstr ""
+msgstr "Muuda adminiliideses"
 
 #. module: website
 #. openerp-web
@@ -1621,7 +1633,7 @@ msgstr ""
 #: code:addons/website/static/src/js/editor/snippets.options.js:35
 #, python-format
 msgid "Edit the menu"
-msgstr ""
+msgstr "Muuda menüüd"
 
 #. module: website
 #: model:res.groups,name:website.group_website_designer
@@ -1663,7 +1675,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_comparisons
 msgid "Expert"
-msgstr ""
+msgstr "Ekspert"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_well
@@ -1685,37 +1697,42 @@ msgstr "Eriti suur"
 #. module: website
 #: model:ir.model.fields,field_description:website.field_website_social_facebook
 msgid "Facebook Account"
-msgstr ""
+msgstr "Facebooki konto"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "Fast"
-msgstr ""
+msgstr "Kiire"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_res_config_settings_favicon
 msgid "Favicon"
-msgstr ""
+msgstr "Favicon"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_three_columns
 msgid "Feature One"
-msgstr ""
+msgstr "Esimene funktsioon"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_three_columns
 msgid "Feature Three"
-msgstr ""
+msgstr "Kolmas funktsioon"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_panel
 msgid "Feature Title"
-msgstr ""
+msgstr "Funktsiooni nimi"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_three_columns
 msgid "Feature Two"
-msgstr ""
+msgstr "Teine funktsioon"
+
+#. module: website
+#: model:ir.model,name:website.model_ir_model_fields
+msgid "Fields"
+msgstr "Väljad"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -1732,7 +1749,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_features
 msgid "First Feature"
-msgstr ""
+msgstr "Esimene funktsioon"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
@@ -1742,7 +1759,7 @@ msgstr "Fikseeritud"
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "Float"
-msgstr ""
+msgstr "Ujukomaarv"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
@@ -1759,7 +1776,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
 msgid "Footer"
-msgstr ""
+msgstr "Jalus"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -1774,7 +1791,7 @@ msgid ""
 "For the Odoo Team,<br/>\n"
 "                            Fabien Pinckaers, Founder"
 msgstr ""
-"Odoo meeskonnale,<br/>\n"
+"Odoo tiimile,<br/>\n"
 "                            Fabien Pinckaers, Asutaja"
 
 #. module: website
@@ -1805,7 +1822,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
 msgid "Gengo"
-msgstr ""
+msgstr "Gengo"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_comparisons
@@ -1839,26 +1856,26 @@ msgstr ""
 #. module: website
 #: model:ir.model.fields,field_description:website.field_website_social_github
 msgid "GitHub Account"
-msgstr ""
+msgstr "GitHubi konto"
 
 #. module: website
 #. openerp-web
 #: code:addons/website/static/src/js/menu/content.js:48
 #, python-format
 msgid "Go To Page"
-msgstr ""
+msgstr "Mine leheküljele"
 
 #. module: website
 #. openerp-web
 #: code:addons/website/static/src/js/editor/snippets.options.js:27
 #, python-format
 msgid "Go to Link"
-msgstr ""
+msgstr "Mine lingile"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.view_view_form_extend
 msgid "Go to Page Manager"
-msgstr ""
+msgstr "Mine lehekülje hadurisse"
 
 #. module: website
 #. openerp-web
@@ -1866,12 +1883,12 @@ msgstr ""
 #: code:addons/website/static/src/xml/website.backend.xml:22
 #, python-format
 msgid "Go to Website"
-msgstr ""
+msgstr "Mine veebisaidile"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
 msgid "GoDaddy"
-msgstr ""
+msgstr "GoDaddy"
 
 #. module: website
 #. openerp-web
@@ -1885,7 +1902,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
 msgid "Google Adwords"
-msgstr ""
+msgstr "Google Adwords"
 
 #. module: website
 #. openerp-web
@@ -1893,13 +1910,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:website.field_res_config_settings_has_google_analytics
 #, python-format
 msgid "Google Analytics"
-msgstr ""
+msgstr "Google Analytics"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_res_config_settings_google_analytics_key
 #: model:ir.model.fields,field_description:website.field_website_google_analytics_key
 msgid "Google Analytics Key"
-msgstr ""
+msgstr "Google Analytics Key"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_res_config_settings_has_google_analytics_dashboard
@@ -1918,13 +1935,13 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
 msgid "Google Business"
-msgstr ""
+msgstr "Google Business"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_res_config_settings_google_management_client_id
 #: model:ir.model.fields,field_description:website.field_website_google_management_client_id
 msgid "Google Client ID"
-msgstr ""
+msgstr "Google Client ID"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_res_config_settings_google_management_client_secret
@@ -1946,17 +1963,17 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
 msgid "Google Webmaster"
-msgstr ""
+msgstr "Google Webmaster"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_website_social_googleplus
 msgid "Google+ Account"
-msgstr ""
+msgstr "Google+ konto"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_feature_grid
 msgid "Great Value"
-msgstr ""
+msgstr "Suurepärane väärtus"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.aboutus
@@ -1968,7 +1985,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "Grid"
-msgstr "Alusvõrk"
+msgstr "Võrgustik"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.menu_search
@@ -1988,12 +2005,12 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.user_navbar
 msgid "HTML/CSS Editor"
-msgstr ""
+msgstr "HTML/CSS redaktor"
 
 #. module: website
 #: model:ir.model,name:website.model_ir_http
 msgid "HTTP routing"
-msgstr ""
+msgstr "HTTP routing"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_cover
@@ -2058,7 +2075,7 @@ msgstr ""
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_website_id
-#: model:ir.model.fields,field_description:website.field_website_menu_id_7239
+#: model:ir.model.fields,field_description:website.field_website_menu_id_7241
 #: model:ir.model.fields,field_description:website.field_website_page_id
 #: model:ir.model.fields,field_description:website.field_website_published_mixin_id
 #: model:ir.model.fields,field_description:website.field_website_redirect_id
@@ -2105,7 +2122,7 @@ msgstr ""
 #: code:addons/website/static/src/xml/website.seo.xml:68
 #, python-format
 msgid "In description"
-msgstr ""
+msgstr "Kirjelduses"
 
 #. module: website
 #. openerp-web
@@ -2119,7 +2136,7 @@ msgstr ""
 #: code:addons/website/static/src/xml/website.seo.xml:67
 #, python-format
 msgid "In title"
-msgstr ""
+msgstr "Pealkirjas"
 
 #. module: website
 #. openerp-web
@@ -2127,7 +2144,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:website.index_management
 #, python-format
 msgid "Indexed"
-msgstr ""
+msgstr "Indekseeritud"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.show_website_info
@@ -2152,17 +2169,17 @@ msgstr "Paigalda keel"
 #. module: website
 #: model:ir.ui.view,arch_db:website.res_config_settings_view_form
 msgid "Install new language"
-msgstr ""
+msgstr "Paigalda uus keel"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
 msgid "Install new languages"
-msgstr ""
+msgstr "Paigalda uusi keeli"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.show_website_info
 msgid "Installed Applications"
-msgstr ""
+msgstr "Paigaldatud rakendused"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.show_website_info
@@ -2172,7 +2189,7 @@ msgstr "Paigaldatud moodulid"
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_company_team
 msgid "Iris Joe, CFO"
-msgstr ""
+msgstr "Iris Joe, CFO"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_company_team
@@ -2183,9 +2200,10 @@ msgid ""
 msgstr ""
 
 #. module: website
+#: model:ir.model.fields,field_description:website.field_website_menu_is_visible
 #: model:ir.model.fields,field_description:website.field_website_page_is_visible
 msgid "Is Visible"
-msgstr ""
+msgstr "On nähtav"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -2209,7 +2227,7 @@ msgstr ""
 
 #. module: website
 #. openerp-web
-#: code:addons/website/static/src/js/content/website_root.js:209
+#: code:addons/website/static/src/js/content/website_root.js:212
 #, python-format
 msgid ""
 "It might be possible to edit the relevant items or fix the issue in <a "
@@ -2245,7 +2263,7 @@ msgstr "Võti"
 #: code:addons/website/static/src/xml/website.seo.xml:48
 #, python-format
 msgid "Keyword"
-msgstr ""
+msgstr "Märksõnad"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_res_config_settings_language_ids
@@ -2301,19 +2319,19 @@ msgstr "Viimati uuendatud"
 #: code:addons/website/static/src/xml/website.backend.xml:109
 #, python-format
 msgid "Last Week"
-msgstr ""
+msgstr "Eelmine kuu"
 
 #. module: website
 #. openerp-web
 #: code:addons/website/static/src/xml/website.backend.xml:111
 #, python-format
 msgid "Last Year"
-msgstr ""
+msgstr "Eelmine aasta"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
 msgid "Launch"
-msgstr ""
+msgstr "Käivita"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -2330,12 +2348,12 @@ msgstr "Vasak"
 #: code:addons/website/static/src/xml/website.seo.xml:65
 #, python-format
 msgid "Legend:"
-msgstr ""
+msgstr "Legend:"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.res_config_settings_view_form
 msgid "Let your customers log in to see their documents"
-msgstr ""
+msgstr "Luba klientidel näha oma kasutajakontol dokumente"
 
 #. module: website
 #. openerp-web
@@ -2366,7 +2384,7 @@ msgstr ""
 #. module: website
 #: model:ir.model.fields,field_description:website.field_website_social_linkedin
 msgid "LinkedIn Account"
-msgstr ""
+msgstr "LinkedIn konto"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_faq_collapse
@@ -2376,7 +2394,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_feature_grid
 msgid "List of Features"
-msgstr ""
+msgstr "Funktsioonide nimekiri"
 
 #. module: website
 #. openerp-web
@@ -2388,7 +2406,7 @@ msgstr "Laadimine..."
 #. module: website
 #: model:ir.ui.view,arch_db:website.external_snippets
 msgid "Local Events"
-msgstr ""
+msgstr "Kohalikud üritused"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_website_menu_id
@@ -2399,12 +2417,12 @@ msgstr "Põhimenüü"
 #. module: website
 #: model:ir.ui.view,arch_db:website.user_navbar
 msgid "Manage Pages"
-msgstr ""
+msgstr "Lehekülgede haldamine"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.edit_website_pages
 msgid "Manage Your Pages"
-msgstr ""
+msgstr "Oma lehekülgede haldamine"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.user_navbar
@@ -2469,7 +2487,7 @@ msgstr "Sõnum"
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_company_team
 msgid "Mich Stark, COO"
-msgstr ""
+msgstr "Mich Stark, COO"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_company_team
@@ -2498,6 +2516,11 @@ msgid "Model Data"
 msgstr ""
 
 #. module: website
+#: model:ir.model,name:website.model_ir_model
+msgid "Models"
+msgstr "Mudelid"
+
+#. module: website
 #. openerp-web
 #: code:addons/website/static/src/xml/website.seo.xml:58
 #, python-format
@@ -2507,37 +2530,37 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "Move to first"
-msgstr ""
+msgstr "Liiguta esimeseks"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "Move to last"
-msgstr ""
+msgstr "Liiguta viimaseks"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "Move to next"
-msgstr ""
+msgstr "Liiguta järgmiseks"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "Move to previous"
-msgstr ""
+msgstr "Liiguta eelmiseks"
 
 #. module: website
 #: selection:website.redirect,type:0
 msgid "Moved permanently"
-msgstr ""
+msgstr "Püsivalt liigutatud"
 
 #. module: website
 #: selection:website.redirect,type:0
 msgid "Moved temporarily"
-msgstr ""
+msgstr "Ajutiselt liigutatud"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.layout
 msgid "My Website"
-msgstr ""
+msgstr "Minu veebisait"
 
 #. module: website
 #. openerp-web
@@ -2590,7 +2613,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_comparisons
 msgid "No support"
-msgstr ""
+msgstr "Tuge pole"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
@@ -2607,7 +2630,7 @@ msgstr "Pole"
 #: code:addons/website/static/src/xml/website.seo.xml:66
 #, python-format
 msgid "Not used"
-msgstr ""
+msgstr "Pole kasutuses"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.show_website_info
@@ -2617,7 +2640,7 @@ msgstr ""
 #. module: website
 #: model:ir.model.fields,field_description:website.field_res_config_settings_language_count
 msgid "Number of languages"
-msgstr ""
+msgstr "Keelte arv"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -2627,7 +2650,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
 msgid "Objectives"
-msgstr ""
+msgstr "Eesmärgid"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.layout_footer_copyright
@@ -2686,7 +2709,7 @@ msgstr ""
 #: code:addons/website/static/src/xml/website.backend.xml:5
 #, python-format
 msgid "On Website"
-msgstr ""
+msgstr "Veebisaidil"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -2722,6 +2745,11 @@ msgid "Open Source ERP"
 msgstr ""
 
 #. module: website
+#: model:ir.ui.view,arch_db:website.layout_footer_copyright
+msgid "Open Source eCommerce"
+msgstr ""
+
+#. module: website
 #: model:ir.ui.view,arch_db:website.user_navbar
 msgid "Optimize SEO"
 msgstr ""
@@ -2729,7 +2757,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_comparisons
 msgid "Order now"
-msgstr ""
+msgstr "Telli kohe"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -2804,14 +2832,14 @@ msgstr ""
 #. module: website
 #: model:ir.model.fields,field_description:website.field_website_page_website_indexed
 msgid "Page Indexed"
-msgstr ""
+msgstr "Indekseeritud lehekülg"
 
 #. module: website
 #. openerp-web
 #: code:addons/website/static/src/xml/website.pageProperties.xml:46
 #, python-format
 msgid "Page Name"
-msgstr ""
+msgstr "lje nimi"
 
 #. module: website
 #. openerp-web
@@ -2819,7 +2847,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:website.user_navbar
 #, python-format
 msgid "Page Properties"
-msgstr ""
+msgstr "Lehekülje omadused"
 
 #. module: website
 #. openerp-web
@@ -2835,7 +2863,7 @@ msgstr "Lehekülje pealkiri"
 #: model:ir.model.fields,field_description:website.field_website_page_url
 #, python-format
 msgid "Page URL"
-msgstr ""
+msgstr "Lehekülje URL"
 
 #. module: website
 #: code:addons/website/models/website.py:208
@@ -2900,7 +2928,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "People"
-msgstr ""
+msgstr "Inimesed"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -2932,9 +2960,14 @@ msgid ""
 msgstr ""
 
 #. module: website
+#: model:ir.ui.view,arch_db:website.layout_footer_copyright
+msgid "Powered by"
+msgstr "Tootja"
+
+#. module: website
 #: model:ir.ui.view,arch_db:website.kanban_contain
 msgid "Prev"
-msgstr ""
+msgstr "Eelmine"
 
 #. module: website
 #. openerp-web
@@ -2946,20 +2979,20 @@ msgstr "Eelvaade"
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_comparisons
 msgid "Professional"
-msgstr ""
+msgstr "Professionaalne"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.user_navbar
 #: model:ir.ui.view,arch_db:website.website_planner
 msgid "Promote"
-msgstr ""
+msgstr "Reklaami"
 
 #. module: website
 #. openerp-web
 #: code:addons/website/static/src/js/menu/seo.js:339
 #, python-format
 msgid "Promote Page"
-msgstr ""
+msgstr "Reklaami lehekülge"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.user_navbar
@@ -2979,7 +3012,7 @@ msgstr ""
 #. module: website
 #: model:ir.model.fields,field_description:website.field_website_partner_id
 msgid "Public Partner"
-msgstr ""
+msgstr "Avalik partner"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_website_user_id
@@ -2992,7 +3025,7 @@ msgstr "Avalik kasutaja"
 #: code:addons/website/static/src/xml/website.pageProperties.xml:122
 #, python-format
 msgid "Publish"
-msgstr ""
+msgstr "Avalda"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -3020,7 +3053,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:website.publish_short
 #, python-format
 msgid "Published"
-msgstr ""
+msgstr "Avaldatud"
 
 #. module: website
 #. openerp-web
@@ -3033,7 +3066,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.http_error_debug
 msgid "QWeb"
-msgstr ""
+msgstr "QWeb"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -3054,7 +3087,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.template_partner_comment
 msgid "Recipient"
-msgstr ""
+msgstr "Saaja"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -3320,23 +3353,23 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "Slideshow"
-msgstr ""
+msgstr "Presentatsiooni esitlus"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "Slow"
-msgstr ""
+msgstr "Aeglane"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.snippet_options
 msgid "Small"
-msgstr ""
+msgstr "Väike"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.view_company_form_inherit_website
 #: model:ir.ui.view,arch_db:website.view_website_form
 msgid "Social Media"
-msgstr ""
+msgstr "Sotsiaalmeedia"
 
 #. module: website
 #: code:addons/website/controllers/main.py:218
@@ -3496,7 +3529,7 @@ msgstr ""
 #. module: website
 #: model:ir.model.fields,help:website.field_ir_act_server_website_url
 msgid "The full URL to access the server action through the website."
-msgstr ""
+msgstr "Täispikk URL serverile internetilehe kaudu ligipääsemiseks."
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.403
@@ -3725,7 +3758,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:website.publish_short
 #, python-format
 msgid "Unpublished"
-msgstr ""
+msgstr "Avaldamata"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -3899,7 +3932,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:website.res_config_settings_view_form
 #: model:ir.ui.view,arch_db:website.view_server_action_search_website
 msgid "Website"
-msgstr "Veebisait"
+msgstr "Veebileht"
 
 #. module: website
 #: model:ir.actions.act_window,name:website.action_module_website
@@ -3925,7 +3958,7 @@ msgstr ""
 #: model:ir.actions.act_window,name:website.action_website_menu
 #: model:ir.model,name:website.model_website_menu
 msgid "Website Menu"
-msgstr ""
+msgstr "Veebisaidi menüü"
 
 #. module: website
 #: model:ir.model.fields,field_description:website.field_res_config_settings_website_name
@@ -3947,7 +3980,7 @@ msgstr ""
 #. module: website
 #: model:ir.model.fields,field_description:website.field_ir_act_server_website_path
 msgid "Website Path"
-msgstr ""
+msgstr "Internetilehe teekond"
 
 #. module: website
 #: model:ir.model,name:website.model_website_redirect
@@ -4002,7 +4035,7 @@ msgstr "Veebilehe URL"
 #. module: website
 #: model:ir.model.fields,field_description:website.field_ir_act_server_website_url
 msgid "Website Url"
-msgstr ""
+msgstr "Internetilehe Url"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.s_faq_collapse
@@ -4112,7 +4145,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
 msgid "Welcome"
-msgstr ""
+msgstr "Tere tulemast"
 
 #. module: website
 #. openerp-web
@@ -4236,7 +4269,7 @@ msgstr ""
 #: model:ir.actions.act_window,help:website.action_module_theme
 #: model:ir.actions.act_window,help:website.action_module_website
 msgid "You should try other search criteria."
-msgstr ""
+msgstr "Peaksid proovima mõnda teist otsingusõna."
 
 #. module: website
 #. openerp-web
@@ -4381,11 +4414,6 @@ msgid "found(s)"
 msgstr ""
 
 #. module: website
-#: model:ir.ui.view,arch_db:website.layout_footer_copyright
-msgid "free website"
-msgstr ""
-
-#. module: website
 #. openerp-web
 #: code:addons/website/static/src/xml/website.seo.xml:28
 #, python-format
@@ -4475,7 +4503,7 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.res_config_settings_view_form
 msgid "page"
-msgstr ""
+msgstr "leht"
 
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
@@ -4557,11 +4585,6 @@ msgstr ""
 #. module: website
 #: model:ir.ui.view,arch_db:website.website_planner
 msgid "will help you:"
-msgstr ""
-
-#. module: website
-#: model:ir.ui.view,arch_db:website.layout_footer_copyright
-msgid "with"
 msgstr ""
 
 #. module: website

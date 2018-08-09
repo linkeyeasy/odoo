@@ -5,7 +5,7 @@
 # Translators:
 # Osama Ahmaro <osamaahmaro@gmail.com>, 2017
 # Ghaith Gammar <g.gammar@saharaifs.net>, 2017
-# Martin Trigaux <mat@odoo.com>, 2017
+# Martin Trigaux, 2017
 # Walid Baruni <baruni@osoul.ly>, 2017
 # Mustafa Rawi <mustafa@cubexco.com>, 2017
 # Mustafa J. Kadhem <safi2266@gmail.com>, 2017
@@ -17,13 +17,14 @@
 # amrnegm <amrnegm.01@gmail.com>, 2017
 # Islam Eldeeb <islameldeb@gmail.com>, 2017
 # hamza tayseer atieh <hamza.atieh@minervadata.com>, 2017
+# Ahmed Yousif <ahmed.yousif@outlook.com>, 2018
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.saas~18\n"
+"Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-02 11:26+0000\n"
-"PO-Revision-Date: 2017-10-02 11:26+0000\n"
-"Last-Translator: hamza tayseer atieh <hamza.atieh@minervadata.com>, 2017\n"
+"POT-Creation-Date: 2017-11-30 13:11+0000\n"
+"PO-Revision-Date: 2017-11-30 13:11+0000\n"
+"Last-Translator: Ahmed Yousif <ahmed.yousif@outlook.com>, 2018\n"
 "Language-Team: Arabic (https://www.transifex.com/odoo/teams/41243/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -38,7 +39,7 @@ msgid " (copy)"
 msgstr " (نسخة)"
 
 #. module: account_asset
-#: code:addons/account_asset/models/account_asset.py:538
+#: code:addons/account_asset/models/account_asset.py:540
 #, python-format
 msgid " (grouped)"
 msgstr "(مجمعة)"
@@ -63,7 +64,7 @@ msgstr "عدد بنود الأقساط"
 #: model:ir.cron,cron_name:account_asset.account_asset_cron
 #: model:ir.cron,name:account_asset.account_asset_cron
 msgid "Account Asset: Generate asset entries"
-msgstr ""
+msgstr "حساب الموجودات : توليد مدخلات الموجودات"
 
 #. module: account_asset
 #: model:ir.model.fields,field_description:account_asset.field_asset_depreciation_confirmation_wizard_date
@@ -97,7 +98,7 @@ msgstr ""
 
 #. module: account_asset
 #. openerp-web
-#: code:addons/account_asset/static/src/js/account_asset.js:41
+#: code:addons/account_asset/static/src/js/account_asset.js:52
 #, python-format
 msgid "Accounting entries waiting for manual verification"
 msgstr ""
@@ -114,7 +115,7 @@ msgid "Additional Options"
 msgstr "خيارات اضافية"
 
 #. module: account_asset
-#: code:addons/account_asset/models/account_asset.py:595
+#: code:addons/account_asset/models/account_asset.py:597
 #, python-format
 msgid "Amount"
 msgstr "الزمن"
@@ -416,7 +417,7 @@ msgid "Cumulative Depreciation"
 msgstr "مجمع الإهلاك"
 
 #. module: account_asset
-#: code:addons/account_asset/models/account_asset.py:595
+#: code:addons/account_asset/models/account_asset.py:597
 #: model:ir.model.fields,field_description:account_asset.field_account_asset_asset_currency_id
 #, python-format
 msgid "Currency"
@@ -546,7 +547,7 @@ msgid "Depreciation board modified"
 msgstr "تم تعديل لوحة الإستهلاكات"
 
 #. module: account_asset
-#: code:addons/account_asset/models/account_asset.py:598
+#: code:addons/account_asset/models/account_asset.py:600
 #, python-format
 msgid "Depreciation line posted."
 msgstr "تم ترحيل بند الإستهلاك"
@@ -574,7 +575,7 @@ msgid "Disposal Moves"
 msgstr "حركات التخريد"
 
 #. module: account_asset
-#: code:addons/account_asset/models/account_asset.py:577
+#: code:addons/account_asset/models/account_asset.py:579
 #, python-format
 msgid "Document closed."
 msgstr "مستند مقفل."
@@ -815,7 +816,7 @@ msgid "One Entry Every"
 msgstr "قيد واحد كل"
 
 #. module: account_asset
-#: code:addons/account_asset/models/account_asset.py:597
+#: code:addons/account_asset/models/account_asset.py:599
 #: model:ir.model.fields,field_description:account_asset.field_account_asset_asset_partner_id
 #: model:ir.model.fields,field_description:account_asset.field_asset_asset_report_partner_id
 #, python-format
@@ -840,7 +841,7 @@ msgstr "ترحيل بنود الإستهلاك"
 
 #. module: account_asset
 #. openerp-web
-#: code:addons/account_asset/static/src/js/account_asset.js:38
+#: code:addons/account_asset/static/src/js/account_asset.js:49
 #: model:ir.model.fields,field_description:account_asset.field_account_asset_depreciation_line_move_posted_check
 #: model:ir.model.fields,field_description:account_asset.field_asset_asset_report_move_check
 #: model:ir.ui.view,arch_db:account_asset.view_asset_asset_report_search
@@ -993,11 +994,19 @@ msgid "The number of depreciations needed to depreciate your asset"
 msgstr "عدد مرات الإستهلاك اللازمة لإهلاك الأصل."
 
 #. module: account_asset
-#: code:addons/account_asset/models/account_invoice.py:52
+#: code:addons/account_asset/models/account_invoice.py:62
 #, python-format
 msgid ""
 "The number of depreciations or the period length of your asset category "
 "cannot be null."
+msgstr ""
+
+#. module: account_asset
+#: code:addons/account_asset/models/account_asset.py:482
+#, python-format
+msgid ""
+"This depreciation is already linked to a journal entry! Please post or "
+"delete it."
 msgstr ""
 
 #. module: account_asset
@@ -1030,7 +1039,7 @@ msgstr "النوع"
 
 #. module: account_asset
 #. openerp-web
-#: code:addons/account_asset/static/src/js/account_asset.js:44
+#: code:addons/account_asset/static/src/js/account_asset.js:55
 #, python-format
 msgid "Unposted"
 msgstr "غير مُؤجل "
@@ -1076,13 +1085,13 @@ msgid "You cannot delete a document that contains posted entries."
 msgstr "لا يمكنك حذف مستند يحتوي على قيود مُرحلة."
 
 #. module: account_asset
-#: code:addons/account_asset/models/account_asset.py:606
+#: code:addons/account_asset/models/account_asset.py:608
 #, python-format
 msgid "You cannot delete posted depreciation lines."
 msgstr "لا يمكنك حذف بنود إهلاك مُرحلة."
 
 #. module: account_asset
-#: code:addons/account_asset/models/account_asset.py:608
+#: code:addons/account_asset/models/account_asset.py:610
 #, python-format
 msgid "You cannot delete posted installment lines."
 msgstr "لا يمكنك حذف بنود أقساط مرحّلة."

@@ -3,20 +3,20 @@
 # * hr
 # 
 # Translators:
-# Martin Trigaux <mat@odoo.com>, 2017
+# Martin Trigaux, 2017
 # Patrik Lermon <patrik.lermon@gmail.com>, 2017
 # Anders Wallenquist <anders.wallenquist@vertel.se>, 2017
-# Frida E <frida.eddestal@gmail.com>, 2017
+# Frida E, 2017
 # Kristoffer Grundström <kristoffer.grundstrom1983@gmail.com>, 2017
 # Martin Wilderoth <martin.wilderoth@linserv.se>, 2017
 # Robert Frykelius <robert.frykelius@linserv.se>, 2017
 # Daniel Forslund <daniel.forslund@gmail.com>, 2017
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.saas~18\n"
+"Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-02 11:26+0000\n"
-"PO-Revision-Date: 2017-10-02 11:26+0000\n"
+"POT-Creation-Date: 2018-02-19 13:43+0000\n"
+"PO-Revision-Date: 2018-02-19 13:43+0000\n"
 "Last-Translator: Daniel Forslund <daniel.forslund@gmail.com>, 2017\n"
 "Language-Team: Swedish (https://www.transifex.com/odoo/teams/41243/sv/)\n"
 "MIME-Version: 1.0\n"
@@ -261,11 +261,6 @@ msgid "Configuration"
 msgstr "Konfiguration"
 
 #. module: hr
-#: model:ir.actions.act_window,name:hr.hr_config_settings_action
-msgid "Configure HR"
-msgstr ""
-
-#. module: hr
 #: model:hr.job,name:hr.job_consultant
 msgid "Consultant"
 msgstr "Konsult"
@@ -406,6 +401,7 @@ msgstr "Medarbetarens namn"
 #: model:ir.ui.menu,name:hr.menu_hr_root
 #: model:ir.ui.menu,name:hr.menu_open_view_employee_list_my
 #: model:ir.ui.view,arch_db:hr.hr_department_view_kanban
+#: model:ir.ui.view,arch_db:hr.res_config_settings_view_form
 #: model:ir.ui.view,arch_db:hr.view_employee_filter
 #: model:ir.ui.view,arch_db:hr.view_employee_tree
 #: model:ir.ui.view,arch_db:hr.view_partner_tree2
@@ -923,11 +919,6 @@ msgid "Private Information"
 msgstr ""
 
 #. module: hr
-#: model:ir.ui.view,arch_db:hr.res_config_settings_view_form
-msgid "Prout prout prout"
-msgstr ""
-
-#. module: hr
 #: model:hr.job,website_description:hr.job_consultant
 msgid "Quantify and negotiate the resources required"
 msgstr ""
@@ -1015,6 +1006,7 @@ msgid ""
 msgstr ""
 
 #. module: hr
+#: model:ir.actions.act_window,name:hr.hr_config_settings_action
 #: model:ir.ui.menu,name:hr.hr_menu_configuration
 #: model:ir.ui.view,arch_db:hr.hr_department_view_kanban
 msgid "Settings"

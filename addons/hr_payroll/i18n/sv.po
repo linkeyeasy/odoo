@@ -3,7 +3,7 @@
 # * hr_payroll
 # 
 # Translators:
-# Martin Trigaux <mat@odoo.com>, 2017
+# Martin Trigaux, 2017
 # Martin Wilderoth <martin.wilderoth@linserv.se>, 2017
 # Anders Wallenquist <anders.wallenquist@vertel.se>, 2017
 # Kristoffer Grundström <kristoffer.grundstrom1983@gmail.com>, 2017
@@ -13,10 +13,10 @@
 # Daniel Forslund <daniel.forslund@gmail.com>, 2017
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.saas~18\n"
+"Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-20 09:53+0000\n"
-"PO-Revision-Date: 2017-09-20 09:53+0000\n"
+"POT-Creation-Date: 2018-06-27 15:42+0000\n"
+"PO-Revision-Date: 2018-06-27 15:42+0000\n"
 "Last-Translator: Daniel Forslund <daniel.forslund@gmail.com>, 2017\n"
 "Language-Team: Swedish (https://www.transifex.com/odoo/teams/41243/sv/)\n"
 "MIME-Version: 1.0\n"
@@ -164,6 +164,11 @@ msgid "All Children Rules"
 msgstr "Alla underordnade Regler"
 
 #. module: hr_payroll
+#: model:hr.salary.rule.category,name:hr_payroll.ALW
+msgid "Allowance"
+msgstr ""
+
+#. module: hr_payroll
 #: selection:hr.payslip.line,condition_select:0
 #: selection:hr.salary.rule,condition_select:0
 msgid "Always True"
@@ -207,6 +212,16 @@ msgstr ""
 "villkor som grundläggande> 1000."
 
 #. module: hr_payroll
+#: model:hr.salary.rule.category,name:hr_payroll.BASIC
+msgid "Basic"
+msgstr "Basal"
+
+#. module: hr_payroll
+#: model:hr.salary.rule,name:hr_payroll.hr_rule_basic
+msgid "Basic Salary"
+msgstr ""
+
+#. module: hr_payroll
 #: model:ir.model.fields,field_description:hr_payroll.field_res_config_settings_module_l10n_be_hr_payroll
 msgid "Belgium Payroll"
 msgstr ""
@@ -244,7 +259,7 @@ msgstr ""
 
 #. module: hr_payroll
 #: model:ir.model.fields,field_description:hr_payroll.field_hr_payslip_line_category_id
-#: model:ir.model.fields,field_description:hr_payroll.field_hr_salary_rule_category_id_7732
+#: model:ir.model.fields,field_description:hr_payroll.field_hr_salary_rule_category_id_7804
 #: model:ir.ui.view,arch_db:hr_payroll.view_hr_rule_filter
 msgid "Category"
 msgstr "Kategori"
@@ -323,6 +338,7 @@ msgid "Company"
 msgstr "Bolag"
 
 #. module: hr_payroll
+#: model:hr.salary.rule.category,name:hr_payroll.COMP
 #: model:ir.ui.view,arch_db:hr_payroll.hr_salary_rule_form
 msgid "Company Contribution"
 msgstr "Bolagets bidrag"
@@ -352,11 +368,6 @@ msgstr "Villkor"
 #: model:ir.ui.menu,name:hr_payroll.menu_hr_payroll_configuration
 msgid "Configuration"
 msgstr "Konfiguration"
-
-#. module: hr_payroll
-#: model:ir.actions.act_window,name:hr_payroll.action_hr_payroll_configuration
-msgid "Configure Payroll"
-msgstr ""
 
 #. module: hr_payroll
 #: model:ir.ui.view,arch_db:hr_payroll.view_hr_payslip_form
@@ -402,6 +413,16 @@ msgstr "Bidrag registrets lönebeskedsrader"
 #: model:ir.ui.view,arch_db:hr_payroll.hr_contribution_register_tree
 msgid "Contribution Registers"
 msgstr "Medarbetarregister"
+
+#. module: hr_payroll
+#: model:hr.salary.rule,name:hr_payroll.hr_salary_rule_convanceallowance1
+msgid "Conveyance Allowance"
+msgstr ""
+
+#. module: hr_payroll
+#: model:hr.salary.rule,name:hr_payroll.hr_salary_rule_ca_gravie
+msgid "Conveyance Allowance For Gravie"
+msgstr ""
 
 #. module: hr_payroll
 #: model:ir.model.fields,field_description:hr_payroll.field_hr_contract_advantage_template_create_uid
@@ -456,6 +477,11 @@ msgstr "Datum från"
 #: model:ir.model.fields,field_description:hr_payroll.field_payslip_lines_contribution_register_date_to
 msgid "Date To"
 msgstr "Datum till"
+
+#. module: hr_payroll
+#: model:hr.salary.rule.category,name:hr_payroll.DED
+msgid "Deduction"
+msgstr ""
 
 #. module: hr_payroll
 #: model:ir.model.fields,field_description:hr_payroll.field_hr_contract_advantage_template_default_value
@@ -604,6 +630,18 @@ msgid "Error ! You cannot create a recursive Salary Structure."
 msgstr "Fel! Du kan inte skapa rekursiva ersättningsstrukturer."
 
 #. module: hr_payroll
+#: code:addons/hr_payroll/models/hr_salary_rule.py:91
+#, python-format
+msgid "Error! You cannot create recursive hierarchy of Salary Rule Category."
+msgstr ""
+
+#. module: hr_payroll
+#: code:addons/hr_payroll/models/hr_salary_rule.py:176
+#, python-format
+msgid "Error! You cannot create recursive hierarchy of Salary Rules."
+msgstr ""
+
+#. module: hr_payroll
 #: model:ir.model.fields,help:hr_payroll.field_hr_payslip_line_register_id
 #: model:ir.model.fields,help:hr_payroll.field_hr_salary_rule_register_id
 msgid "Eventual third party involved in the salary payment of the employees."
@@ -656,11 +694,27 @@ msgid "Generate payslips for all selected employees"
 msgstr "Generera lönespecifikationer för valda anställda"
 
 #. module: hr_payroll
+#: model:hr.salary.rule,name:hr_payroll.hr_salary_rule_sales_commission
+msgid "Get 1% of sales"
+msgstr ""
+
+#. module: hr_payroll
+#: model:hr.salary.rule,name:hr_payroll.hr_rule_taxable
+#: model:hr.salary.rule.category,name:hr_payroll.GROSS
+msgid "Gross"
+msgstr ""
+
+#. module: hr_payroll
 #: model:ir.ui.view,arch_db:hr_payroll.view_hr_payslip_filter
 #: model:ir.ui.view,arch_db:hr_payroll.view_hr_payslip_line_filter
 #: model:ir.ui.view,arch_db:hr_payroll.view_hr_rule_filter
 msgid "Group By"
 msgstr "Gruppera på"
+
+#. module: hr_payroll
+#: model:hr.salary.rule,name:hr_payroll.hr_salary_rule_houserentallowance1
+msgid "House Rent Allowance"
+msgstr ""
 
 #. module: hr_payroll
 #: model:ir.model.fields,field_description:hr_payroll.field_hr_contract_advantage_template_id
@@ -840,6 +894,11 @@ msgid "Maximum Range"
 msgstr "Maximalt omfång"
 
 #. module: hr_payroll
+#: model:hr.salary.rule,name:hr_payroll.hr_salary_rule_meal_voucher
+msgid "Meal Voucher"
+msgstr ""
+
+#. module: hr_payroll
 #: model:ir.model.fields,field_description:hr_payroll.field_hr_payslip_line_condition_range_min
 #: model:ir.model.fields,field_description:hr_payroll.field_hr_salary_rule_condition_range_min
 msgid "Minimum Range"
@@ -870,7 +929,17 @@ msgid "Name"
 msgstr "Namn"
 
 #. module: hr_payroll
-#: code:addons/hr_payroll/models/hr_payslip.py:197
+#: model:hr.salary.rule.category,name:hr_payroll.NET
+msgid "Net"
+msgstr ""
+
+#. module: hr_payroll
+#: model:hr.salary.rule,name:hr_payroll.hr_rule_net
+msgid "Net Salary"
+msgstr ""
+
+#. module: hr_payroll
+#: code:addons/hr_payroll/models/hr_payslip.py:199
 #, python-format
 msgid "Normal Working Days paid at 100%"
 msgstr "Normala arbetsdagar betalas 100%"
@@ -1002,6 +1071,7 @@ msgid "Payslip 'Date From' must be before 'Date To'."
 msgstr "Lönespecifikation 'Datum från' måste vara före 'Datum till'"
 
 #. module: hr_payroll
+#: model:ir.model,name:hr_payroll.model_hr_payslip_run
 #: model:ir.model.fields,field_description:hr_payroll.field_hr_payslip_payslip_run_id
 #: model:ir.ui.view,arch_db:hr_payroll.hr_payslip_run_filter
 msgid "Payslip Batches"
@@ -1048,11 +1118,6 @@ msgstr "Lönerader per mottagare i registret"
 #: model:ir.model.fields,field_description:hr_payroll.field_hr_payslip_name
 msgid "Payslip Name"
 msgstr "Lönebeskedsnamn"
-
-#. module: hr_payroll
-#: model:ir.model,name:hr_payroll.model_hr_payslip_run
-msgid "Payslip Run"
-msgstr ""
 
 #. module: hr_payroll
 #: model:ir.model,name:hr_payroll.model_hr_payslip_worked_days
@@ -1114,6 +1179,16 @@ msgstr ""
 #: model:ir.ui.view,arch_db:hr_payroll.view_payslip_lines_contribution_register
 msgid "Print"
 msgstr "Skriv ut"
+
+#. module: hr_payroll
+#: model:hr.salary.rule,name:hr_payroll.hr_salary_rule_professionaltax1
+msgid "Professional Tax"
+msgstr ""
+
+#. module: hr_payroll
+#: model:hr.salary.rule,name:hr_payroll.hr_salary_rule_providentfund1
+msgid "Provident Fund"
+msgstr ""
 
 #. module: hr_payroll
 #: selection:hr.payslip.line,amount_select:0
@@ -1258,7 +1333,7 @@ msgstr "LöneRegler"
 
 #. module: hr_payroll
 #: code:addons/hr_payroll/models/hr_payslip.py:396
-#: code:addons/hr_payroll/models/hr_payslip.py:445
+#: code:addons/hr_payroll/models/hr_payslip.py:446
 #, python-format
 msgid "Salary Slip of %s for %s"
 msgstr "Lönebesked för %s för %s"
@@ -1277,12 +1352,6 @@ msgstr "Lönestruktur"
 #: model:ir.ui.menu,name:hr_payroll.menu_hr_payroll_structure_view
 msgid "Salary Structures"
 msgstr "Lönestruktur"
-
-#. module: hr_payroll
-#: model:ir.actions.act_window,name:hr_payroll.action_view_hr_payroll_structure_tree
-#: model:ir.ui.menu,name:hr_payroll.menu_hr_payroll_structure_tree
-msgid "Salary Structures Hierarchy"
-msgstr "Lönestrukturstatistik Hierarki"
 
 #. module: hr_payroll
 #: model:ir.model.fields,field_description:hr_payroll.field_hr_contract_schedule_pay
@@ -1329,6 +1398,7 @@ msgid "Set to Draft"
 msgstr "Sätt till utkast"
 
 #. module: hr_payroll
+#: model:ir.actions.act_window,name:hr_payroll.action_hr_payroll_configuration
 #: model:ir.ui.menu,name:hr_payroll.menu_hr_payroll_global_settings
 msgid "Settings"
 msgstr "Inställningar"
@@ -1514,7 +1584,7 @@ msgid "You must select employee(s) to generate payslip(s)."
 msgstr "Du måste välja anställda för att skapa lönebesked"
 
 #. module: hr_payroll
-#: code:addons/hr_payroll/models/hr_payslip.py:516
+#: code:addons/hr_payroll/models/hr_payslip.py:517
 #, python-format
 msgid "You must set a contract to create a payslip line."
 msgstr ""

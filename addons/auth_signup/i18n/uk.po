@@ -3,24 +3,26 @@
 # * auth_signup
 # 
 # Translators:
-# Bohdan Lisnenko <lem8r.ka11a@gmail.com>, 2017
-# Zoriana Zaiats <sorenabell@quintagroup.com>, 2017
-# Martin Trigaux <mat@odoo.com>, 2017
+# Bohdan Lisnenko, 2017
+# Roman Kozlovskyi <krzroman@gmail.com>, 2017
+# Alina Semeniuk <alinasemeniuk1@gmail.com>, 2017
+# Zoriana Zaiats, 2017
+# Martin Trigaux, 2017
 # ТАрас <tratatuta@i.ua>, 2017
-# Аліна Семенюк <alinasemeniuk1@gmail.com>, 2017
+# Ostap Yakovenko <ostap.yakovenko@maao.com.ua>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.saas~18\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-10-02 11:26+0000\n"
 "PO-Revision-Date: 2017-10-02 11:26+0000\n"
-"Last-Translator: Аліна Семенюк <alinasemeniuk1@gmail.com>, 2017\n"
+"Last-Translator: Ostap Yakovenko <ostap.yakovenko@maao.com.ua>, 2017\n"
 "Language-Team: Ukrainian (https://www.transifex.com/odoo/teams/41243/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Language: uk\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
 #. module: auth_signup
 #: model:mail.template,body_html:auth_signup.reset_password_email
@@ -63,7 +65,7 @@ msgstr ""
 "    </table>\n"
 "</div>\n"
 "<div style=\"padding:0px;width:600px;margin:auto;background: #FFFFFF repeat top /100%;color:#777777\">\n"
-"    <p>Шановний ${ім'я.об'єкту},</p>\n"
+"    <p>Шановний ${object.name},</p>\n"
 "    <p>Пароль був скинутий для облікового запису Odoo, на цю електронну адресу.</p>\n"
 "   Ви можете змінити свій пароль, перейшовши за цим посиланням, який діятиме протягом 24 годин:</p>\n"
 "    <div style=\"text-align: center; margin-top: 16px;\">\n"
@@ -73,9 +75,9 @@ msgstr ""
 "    <p>З найкращими побажаннями,</p>\n"
 "</div>\n"
 "<div style=\"padding:0px;width:600px;margin:auto; margin-top: 10px; background: #fff repeat top /100%;color:#777777\">\n"
-"    ${підпис.користувача | безпечний}\n"
+"    ${user.signature | safe}\n"
 "    <p style=\"font-size: 11px; margin-top: 10px;\">\n"
-"        <strong>Відправлено ${компанія.користувача_id.назва} користувачем <a href=\"www.odoo.com\" style=\"text-decoration:none; color: #875A7B;\">Odoo</a></strong>\n"
+"        <strong>Відправлено ${user.company_id.name} користувачем <a href=\"www.odoo.com\" style=\"text-decoration:none; color: #875A7B;\">Odoo</a></strong>\n"
 "    </p>\n"
 "</div>"
 
@@ -123,22 +125,22 @@ msgstr ""
 "    </table>\n"
 "</div>\n"
 "<div style=\"padding:0px;width:600px;margin:auto;background: #FFFFFF repeat top /100%;color:#777777\">\n"
-"<p>Шановний ${ім'я.об'єкту},</p>\n"
+"<p>Шановний ${object.name},</p>\n"
 "    <p>\n"
-"        Вам було запропоновано підключитися до \"${об'єкт.компанія_id.назва}\" щоб отримати доступ до ваших документів у Odoo.\n"
+"        Вам було запропоновано підключитися до \"${object.company_id.name}\" щоб отримати доступ до ваших документів у Odoo.\n"
 "    </p>\n"
 "    <p>\n"
 "        Щоб отримати запрошення, натисніть на це посилання:\n"
 "    </p>\n"
 "    <div style=\"text-align: center; margin-top: 16px;\">\n"
-"         <a href=\"${object.signup_url}\" style=\"padding: 5px 10px; font-size: 12px; line-height: 18px; color: #FFFFFF; border-color:#875A7B; text-decoration: none; display: inline-block; margin-bottom: 0px; font-weight: 400; text-align: center; vertical-align: middle; cursor: pointer; white-space: nowrap; background-image: none; background-color: #875A7B; border: 1px solid #875A7B; border-radius:3px\">Прийняти запрошення на \"${об'єкт.компанія_id.назва}\"</a>\n"
+"         <a href=\"${object.signup_url}\" style=\"padding: 5px 10px; font-size: 12px; line-height: 18px; color: #FFFFFF; border-color:#875A7B; text-decoration: none; display: inline-block; margin-bottom: 0px; font-weight: 400; text-align: center; vertical-align: middle; cursor: pointer; white-space: nowrap; background-image: none; background-color: #875A7B; border: 1px solid #875A7B; border-radius:3px\">Прийняти запрошення на \"${object.company_id.name}\"</a>\n"
 "    </div>\n"
 "    <p>З найкращими побажаннями,</p>\n"
 "</div>\n"
 "<div style=\"padding:0px;width:600px;margin:auto; margin-top: 10px; background: #fff repeat top /100%;color:#777777\">\n"
-"    ${підпис.користувача | безпечний}\n"
+"    ${user.signature | safe}\n"
 "    <p style=\"font-size: 11px; margin-top: 10px;\">\n"
-"        <strong>Відправлено ${компанія.користувача_id.назва} користувачем<a href=\"www.odoo.com\" style=\"text-decoration:none; color: #875A7B;\">Odoo</a></strong>\n"
+"        <strong>Відправлено ${object.company_id.name} користувачем<a href=\"www.odoo.com\" style=\"text-decoration:none; color: #875A7B;\">Odoo</a></strong>\n"
 "    </p>\n"
 "</div>"
 
@@ -167,7 +169,6 @@ msgid ""
 "    <p>\n"
 "        Your login: ${object.email}\n"
 "        <br/>\n"
-"        Your password: ${ctx['password']}\n"
 "    </p>\n"
 "    <p>\n"
 "        To gain access to your account, you can use the following link:\n"
@@ -184,6 +185,38 @@ msgid ""
 "    </p>\n"
 "</div>"
 msgstr ""
+"<div style=\"padding:0px;width:600px;margin:auto;background: #FFFFFF repeat top /100%;color:#777777\">\n"
+"    <table cellspacing=\"0\" cellpadding=\"0\" style=\"width:600px;border-collapse:collapse;background:inherit;color:inherit\">\n"
+"        <tbody><tr>\n"
+"            <td valign=\"center\" width=\"200\" style=\"padding:10px 10px 10px 5px;font-size: 12px\">\n"
+"                <img src=\"/logo.png\" style=\"padding: 0px; margin: 0px; height: auto; width: 80px;\" alt=\"${user.company_id.name}\"/>\n"
+"            </td>\n"
+"        </tr></tbody>\n"
+"    </table>\n"
+"</div>\n"
+"<div style=\"padding:0px;width:600px;margin:auto;background: #FFFFFF repeat top /100%;color:#777777\">\n"
+"    <p>Шановний ${object.name},</p>\n"
+"    <p>\n"
+"        Ваш обліковий запис успішно створено!\n"
+"    </p>\n"
+"    <p>\n"
+"        Ваш логін: ${object.email}\n"
+"        <br/>\n"
+"    </p>\n"
+"    <p>\n"
+"        Щоб отримати доступ до свого облікового запису, ви можете скористатися таким посиланням:\n"
+"    </p>\n"
+"    <div style=\"text-align: center; margin-top: 16px;\">\n"
+"        <a href=\"/web/login?${ctx['auth_login']}\" style=\"padding: 5px 10px; font-size: 12px; line-height: 18px; color: #FFFFFF; border-color:#875A7B; text-decoration: none; display: inline-block; margin-bottom: 0px; font-weight: 400; text-align: center; vertical-align: middle; cursor: pointer; white-space: nowrap; background-image: none; background-color: #875A7B; border: 1px solid #875A7B; border-radius:3px\">Перейти до мого облікового запису</a>\n"
+"    </div>\n"
+"    <p>З найкращими побажаннями,</p>\n"
+"</div>\n"
+"<div style=\"padding:0px;width:600px;margin:auto; margin-top: 10px; background: #fff repeat top /100%;color:#777777\">\n"
+"    ${user.signature | safe}\n"
+"    <p style=\"font-size: 11px; margin-top: 10px;\">\n"
+"        <strong>Надіслано ${user.company_id.name} використовуючи <a href=\"www.odoo.com\" style=\"text-decoration:none; color: #875A7B;\">Odoo</a></strong>\n"
+"    </p>\n"
+"</div>"
 
 #. module: auth_signup
 #: model:ir.ui.view,arch_db:auth_signup.res_users_form_view
@@ -206,7 +239,7 @@ msgstr ""
 #. module: auth_signup
 #: model:ir.ui.view,arch_db:auth_signup.signup
 msgid "Already have an account?"
-msgstr ""
+msgstr "Вже є аккаунт?"
 
 #. module: auth_signup
 #: code:addons/auth_signup/controllers/main.py:78
@@ -260,13 +293,13 @@ msgstr "Контакт"
 #. module: auth_signup
 #: model:ir.ui.view,arch_db:auth_signup.res_config_settings_view_form
 msgid "Copy access rights from"
-msgstr ""
+msgstr "Копіювати права доступу з"
 
 #. module: auth_signup
 #: code:addons/auth_signup/controllers/main.py:55
 #, python-format
 msgid "Could not create a new account."
-msgstr "Не можливо створити новий обліковий запис"
+msgstr "Не можливо створити новий обліковий запис."
 
 #. module: auth_signup
 #: code:addons/auth_signup/controllers/main.py:80
@@ -277,17 +310,17 @@ msgstr "Не можливо зкинути пароль"
 #. module: auth_signup
 #: model:ir.model.fields,field_description:auth_signup.field_res_config_settings_auth_signup_uninvited
 msgid "Customer Account"
-msgstr ""
+msgstr "Клієнтський обліковий запис"
 
 #. module: auth_signup
 #: model:ir.ui.view,arch_db:auth_signup.res_config_settings_view_form
 msgid "Default Access Rights"
-msgstr ""
+msgstr "Права доступу за замовчуванням"
 
 #. module: auth_signup
 #: model:ir.ui.view,arch_db:auth_signup.login
 msgid "Don't have an account?"
-msgstr ""
+msgstr "Не маєте облікового запису?"
 
 #. module: auth_signup
 #: model:ir.model.fields,field_description:auth_signup.field_res_config_settings_auth_signup_reset_password
@@ -298,7 +331,7 @@ msgstr "Дозволити зкидання пароля зі сторінки �
 #. module: auth_signup
 #: selection:res.config.settings,auth_signup_uninvited:0
 msgid "Free sign up (B2C)"
-msgstr ""
+msgstr "Безкоштовна реєстрація (B2C)"
 
 #. module: auth_signup
 #: model:ir.model,name:auth_signup.model_ir_http
@@ -315,12 +348,12 @@ msgstr ""
 #: code:addons/auth_signup/controllers/main.py:111
 #, python-format
 msgid "Invalid signup token"
-msgstr "Невірний талон входу"
+msgstr "Невірний вхід токену"
 
 #. module: auth_signup
 #: model:ir.ui.view,arch_db:auth_signup.res_config_settings_view_form
 msgid "Let your customers log in to see their documents"
-msgstr ""
+msgstr "Дозвольте вашим клієнтам увійти, щоби переглянути їх документи"
 
 #. module: auth_signup
 #: selection:res.users,state:0
@@ -331,12 +364,12 @@ msgstr "Ніколи не входив"
 #: code:addons/auth_signup/controllers/main.py:73
 #, python-format
 msgid "No login provided."
-msgstr ""
+msgstr "Не введено логін."
 
 #. module: auth_signup
 #: selection:res.config.settings,auth_signup_uninvited:0
 msgid "On invitation (B2B)"
-msgstr ""
+msgstr "За запрошенням (B2B)"
 
 #. module: auth_signup
 #: model:ir.ui.view,arch_db:auth_signup.fields
@@ -346,7 +379,7 @@ msgstr "Пароль"
 #. module: auth_signup
 #: model:ir.ui.view,arch_db:auth_signup.res_config_settings_view_form
 msgid "Password Reset"
-msgstr ""
+msgstr "Скидання паролю"
 
 #. module: auth_signup
 #: model:mail.template,subject:auth_signup.reset_password_email
@@ -357,7 +390,7 @@ msgstr "Скидання паролю"
 #: code:addons/auth_signup/controllers/main.py:121
 #, python-format
 msgid "Passwords do not match; please retype them."
-msgstr ""
+msgstr "Паролі не збігаються; будь ласка, введіть їх знову."
 
 #. module: auth_signup
 #: model:ir.ui.view,arch_db:auth_signup.login
@@ -419,19 +452,19 @@ msgstr "URL реєстрації"
 #: code:addons/auth_signup/models/res_users.py:88
 #, python-format
 msgid "Signup is not allowed for uninvited users"
-msgstr ""
+msgstr "Реєстрація незапрошених користувачів заборонена"
 
 #. module: auth_signup
 #: code:addons/auth_signup/models/res_partner.py:146
 #, python-format
 msgid "Signup token '%s' is no longer valid"
-msgstr ""
+msgstr "Талон реєстрації '%s' вже не є вірним"
 
 #. module: auth_signup
 #: code:addons/auth_signup/models/res_partner.py:142
 #, python-format
 msgid "Signup token '%s' is not valid"
-msgstr ""
+msgstr "Талон реєстрації '%s' не є вірним"
 
 #. module: auth_signup
 #: model:ir.model.fields,field_description:auth_signup.field_res_users_state
@@ -441,13 +474,13 @@ msgstr "Статус"
 #. module: auth_signup
 #: model:ir.model.fields,field_description:auth_signup.field_res_config_settings_auth_signup_template_user_id
 msgid "Template user for new users created through signup"
-msgstr "шаблон користувача для створення користувачів під час реєстрації"
+msgstr "Шаблон користувача для створення користувачів під час реєстрації"
 
 #. module: auth_signup
 #: code:addons/auth_signup/controllers/main.py:119
 #, python-format
 msgid "The form was not properly filled in."
-msgstr ""
+msgstr "Форма не була належним чином заповнена."
 
 #. module: auth_signup
 #: model:ir.model,name:auth_signup.model_res_users
@@ -457,7 +490,7 @@ msgstr "Користувачі"
 #. module: auth_signup
 #: model:mail.template,subject:auth_signup.mail_template_user_signup_account_created
 msgid "Welcome to ${object.company_id.name}!"
-msgstr ""
+msgstr "Вітаємо в ${object.company_id.name}!"
 
 #. module: auth_signup
 #: model:ir.ui.view,arch_db:auth_signup.fields
@@ -473,7 +506,7 @@ msgstr "Ваше ім’я"
 #. module: auth_signup
 #: model:ir.ui.view,arch_db:auth_signup.fields
 msgid "e.g. John Doe"
-msgstr "наприклад Степан Бандера"
+msgstr "наприклад, Степан Бандера"
 
 #. module: auth_signup
 #: model:ir.model,name:auth_signup.model_res_config_settings

@@ -3,12 +3,12 @@
 # * mass_mailing
 # 
 # Translators:
-# Martin Trigaux <mat@odoo.com>, 2017
+# Martin Trigaux, 2017
 # Martin Wilderoth <martin.wilderoth@linserv.se>, 2017
 # Anders Wallenquist <anders.wallenquist@vertel.se>, 2017
 # Kristoffer Grundström <kristoffer.grundstrom1983@gmail.com>, 2017
-# Lord Cobol <mattias@invaliddesign.com>, 2017
-# Frida E <frida.eddestal@gmail.com>, 2017
+# Lord Cobol, 2017
+# Frida E, 2017
 # Patrik Lermon <patrik.lermon@gmail.com>, 2017
 # Robert Frykelius <robert.frykelius@linserv.se>, 2017
 # Haojun Zou <apollo_zhj@msn.com>, 2017
@@ -16,10 +16,10 @@
 # Kim Asplund <kim.asplund@gmail.com>, 2017
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.saas~18\n"
+"Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-02 11:26+0000\n"
-"PO-Revision-Date: 2017-10-02 11:26+0000\n"
+"POT-Creation-Date: 2018-02-19 13:43+0000\n"
+"PO-Revision-Date: 2018-02-19 13:43+0000\n"
 "Last-Translator: Kim Asplund <kim.asplund@gmail.com>, 2017\n"
 "Language-Team: Swedish (https://www.transifex.com/odoo/teams/41243/sv/)\n"
 "MIME-Version: 1.0\n"
@@ -441,11 +441,6 @@ msgid "Configuration"
 msgstr "Konfiguration"
 
 #. module: mass_mailing
-#: model:ir.actions.act_window,name:mass_mailing.action_mass_mailing_configuration
-msgid "Configure Mass Mailing"
-msgstr ""
-
-#. module: mass_mailing
 #: model:ir.ui.view,arch_db:mass_mailing.view_mail_mass_mailing_list_form
 msgid "Contact List"
 msgstr ""
@@ -718,6 +713,11 @@ msgstr "Facebookkonto"
 #: model:ir.model.fields,field_description:mass_mailing.field_mail_mass_mailing_failed
 msgid "Failed"
 msgstr "Misslyckades"
+
+#. module: mass_mailing
+#: model:ir.model,name:mass_mailing.model_ir_model_fields
+msgid "Fields"
+msgstr "Fält"
 
 #. module: mass_mailing
 #: model:mail.mass_mailing,name:mass_mailing.mass_mail_1
@@ -1426,7 +1426,6 @@ msgstr ""
 
 #. module: mass_mailing
 #: model:ir.model.fields,field_description:mass_mailing.field_mail_statistics_report_scheduled_date
-#: model:ir.model.fields,field_description:mass_mailing.field_mail_mass_mailing_next_departure
 msgid "Scheduled Date"
 msgstr "Planerat datum"
 
@@ -1434,6 +1433,11 @@ msgstr "Planerat datum"
 #: model:ir.ui.view,arch_db:mass_mailing.view_mail_statistics_report_search
 msgid "Scheduled Month"
 msgstr "Planerad månad"
+
+#. module: mass_mailing
+#: model:ir.model.fields,field_description:mass_mailing.field_mail_mass_mailing_next_departure
+msgid "Scheduled date"
+msgstr ""
 
 #. module: mass_mailing
 #: model:mail.mass_mailing,name:mass_mailing.mass_mail_2
@@ -1534,6 +1538,7 @@ msgid "Sequence"
 msgstr "Sekvens"
 
 #. module: mass_mailing
+#: model:ir.actions.act_window,name:mass_mailing.action_mass_mailing_configuration
 #: model:ir.ui.menu,name:mass_mailing.menu_mass_mailing_global_settings
 #: model:ir.ui.view,arch_db:mass_mailing.view_mail_mass_mailing_campaign_kanban
 msgid "Settings"
@@ -1722,11 +1727,6 @@ msgstr "Titel"
 #: model:ir.model.fields,field_description:mass_mailing.field_mail_mass_mailing_total
 msgid "Total"
 msgstr "Totalt"
-
-#. module: mass_mailing
-#: model:ir.ui.view,arch_db:mass_mailing.view_mail_mass_mailing_links_search
-msgid "Tracked Link"
-msgstr ""
 
 #. module: mass_mailing
 #: model:ir.ui.view,arch_db:mass_mailing.view_mail_mass_mailing_campaign_form

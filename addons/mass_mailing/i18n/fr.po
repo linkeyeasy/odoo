@@ -4,7 +4,7 @@
 # 
 # Translators:
 # Fabien Bourgeois <fabien@yaltik.com>, 2017
-# Martin Trigaux <mat@odoo.com>, 2017
+# Martin Trigaux, 2017
 # Melanie Bernard <mbe@odoo.com>, 2017
 # Eloïse Stilmant <est@odoo.com>, 2017
 # Quentin THEURET <odoo@kerpeo.com>, 2017
@@ -19,8 +19,8 @@
 # Sébastien Le Ray <sebastien-github@orniz.org>, 2017
 # Olivier Dony <odo@odoo.com>, 2017
 # Daniel & Delphine <dd2013@leschoupinous.net>, 2017
-# Kévin R. <realrom@hotmail.fr>, 2017
-# Florian Hatat <mininet@wanadoo.fr>, 2017
+# Kévin R., 2017
+# Florian Hatat, 2017
 # Fabien Pinckaers <fp@openerp.com>, 2017
 # Vincent Regouby <v.regouby@inetshore.com>, 2017
 # Jean-Marc Dupont <jmd@6it.fr>, 2017
@@ -37,10 +37,10 @@
 # fr trans <e2ftrans1@yahoo.com>, 2017
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.saas~18\n"
+"Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-02 11:26+0000\n"
-"PO-Revision-Date: 2017-10-02 11:26+0000\n"
+"POT-Creation-Date: 2018-02-19 13:43+0000\n"
+"PO-Revision-Date: 2018-02-19 13:43+0000\n"
 "Last-Translator: fr trans <e2ftrans1@yahoo.com>, 2017\n"
 "Language-Team: French (https://www.transifex.com/odoo/teams/41243/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -479,11 +479,6 @@ msgid "Configuration"
 msgstr "Configuration"
 
 #. module: mass_mailing
-#: model:ir.actions.act_window,name:mass_mailing.action_mass_mailing_configuration
-msgid "Configure Mass Mailing"
-msgstr "Configurer le mass mailing"
-
-#. module: mass_mailing
 #: model:ir.ui.view,arch_db:mass_mailing.view_mail_mass_mailing_list_form
 msgid "Contact List"
 msgstr "Liste de contacts"
@@ -687,7 +682,7 @@ msgstr "Courriel"
 #: model:ir.ui.menu,name:mass_mailing.mass_mailing_menu_root
 #: model:ir.ui.view,arch_db:mass_mailing.res_config_settings_view_form
 msgid "Email Marketing"
-msgstr "Marketing par e-mail"
+msgstr "Emailing"
 
 #. module: mass_mailing
 #: model:ir.model,name:mass_mailing.model_mail_mail_statistics
@@ -761,6 +756,11 @@ msgstr "Compte Facebook"
 #: model:ir.model.fields,field_description:mass_mailing.field_mail_mass_mailing_failed
 msgid "Failed"
 msgstr "Échec"
+
+#. module: mass_mailing
+#: model:ir.model,name:mass_mailing.model_ir_model_fields
+msgid "Fields"
+msgstr "Champs"
 
 #. module: mass_mailing
 #: model:mail.mass_mailing,name:mass_mailing.mass_mail_1
@@ -1496,7 +1496,6 @@ msgstr "Planifié"
 
 #. module: mass_mailing
 #: model:ir.model.fields,field_description:mass_mailing.field_mail_statistics_report_scheduled_date
-#: model:ir.model.fields,field_description:mass_mailing.field_mail_mass_mailing_next_departure
 msgid "Scheduled Date"
 msgstr "Date prévue"
 
@@ -1504,6 +1503,11 @@ msgstr "Date prévue"
 #: model:ir.ui.view,arch_db:mass_mailing.view_mail_statistics_report_search
 msgid "Scheduled Month"
 msgstr "Mois planifié"
+
+#. module: mass_mailing
+#: model:ir.model.fields,field_description:mass_mailing.field_mail_mass_mailing_next_departure
+msgid "Scheduled date"
+msgstr "Date prévue"
 
 #. module: mass_mailing
 #: model:mail.mass_mailing,name:mass_mailing.mass_mail_2
@@ -1606,6 +1610,7 @@ msgid "Sequence"
 msgstr "Séquence"
 
 #. module: mass_mailing
+#: model:ir.actions.act_window,name:mass_mailing.action_mass_mailing_configuration
 #: model:ir.ui.menu,name:mass_mailing.menu_mass_mailing_global_settings
 #: model:ir.ui.view,arch_db:mass_mailing.view_mail_mass_mailing_campaign_kanban
 msgid "Settings"
@@ -1817,11 +1822,6 @@ msgstr "Civilité"
 #: model:ir.model.fields,field_description:mass_mailing.field_mail_mass_mailing_total
 msgid "Total"
 msgstr "Total"
-
-#. module: mass_mailing
-#: model:ir.ui.view,arch_db:mass_mailing.view_mail_mass_mailing_links_search
-msgid "Tracked Link"
-msgstr "Lien suivi"
 
 #. module: mass_mailing
 #: model:ir.ui.view,arch_db:mass_mailing.view_mail_mass_mailing_campaign_form

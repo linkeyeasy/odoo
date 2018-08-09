@@ -3,45 +3,47 @@
 # * mail
 # 
 # Translators:
-# Martin Trigaux <mat@odoo.com>, 2017
+# Martin Trigaux, 2017
 # Anja Funk <anja.funk@afimage.de>, 2017
 # Tina Rittmüller <tr@ife.de>, 2017
-# Wolfgang Taferner <wolfgang.transifex@service.wt-io-it.at>, 2017
+# Wolfgang Taferner, 2017
 # Markus Menner <markus.menner@axxelia.com>, 2017
 # Thorsten Vocks <thorsten.vocks@openbig.org>, 2017
 # Ralf Hilgenstock <rh@dialoge.info>, 2017
 # Ermin Trevisan <trevi@twanda.com>, 2017
 # Thomas Neu <t.neu@runbox.com>, 2017
-# Andi <flimflam@salasar.de>, 2017
+# Andi, 2017
 # darenkster <inactive+darenkster@transifex.com>, 2017
 # Leon Fischer <leon.fischer621@gmail.com>, 2017
-# Renzo Meister <info@jamotion.ch>, 2017
+# Renzo Meister, 2017
 # JackTheHunter <Maximilian.N98@gmail.com>, 2017
 # Martin K <martinkuenz@gmail.com>, 2017
-# Niki Waibel <niki.waibel@gmail.com>, 2017
+# Niki Waibel, 2017
 # Marvin Elia Hoppe <marvin_elia@web.de>, 2017
 # Gab_Odoo <gab@odoo.com>, 2017
 # key six <mobile.umts@gmail.com>, 2017
 # Bülent Tiknas <btiknas@googlemail.com>, 2017
 # Walter Müller <inactive+WILL.I.AM@transifex.com>, 2017
 # Christian Körner <fipes.de@gmail.com>, 2017
-# Tom <github@strohmeier.email>, 2017
-# Dejan Dinic <dejan.dinic@bluewin.ch>, 2017
+# Tom, 2017
+# Dejan Dinic, 2017
 # Henry Mineehen <info@mineehen.de>, 2017
 # Mathias Neef <mn@copado.de>, 2017
 # Katharina Moritz <kmo@e2f.com>, 2017
 # Malte Jansen <work@maltejansen.de>, 2017
 # AppleMentalist <felix.schnatbaum@gmail.com>, 2017
+# Till Stone <benzi95@web.de>, 2017
 # Constantin Ehrenstein <transifex@skiller.eu>, 2017
 # DE R1 <e2fes1@hotmail.com>, 2017
 # DE T1 <e2f8846@yahoo.com>, 2017
+# e2f <projects@e2f.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-24 08:59+0000\n"
-"PO-Revision-Date: 2017-10-24 08:59+0000\n"
-"Last-Translator: DE T1 <e2f8846@yahoo.com>, 2017\n"
+"POT-Creation-Date: 2017-11-30 13:11+0000\n"
+"PO-Revision-Date: 2017-11-30 13:11+0000\n"
+"Last-Translator: e2f <projects@e2f.com>, 2018\n"
 "Language-Team: German (https://www.transifex.com/odoo/teams/41243/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -309,17 +311,10 @@ msgstr ""
 
 #. module: mail
 #. openerp-web
-#: code:addons/mail/static/src/xml/activity.xml:51
+#: code:addons/mail/static/src/xml/activity.xml:49
 #, python-format
 msgid ", due on"
-msgstr ""
-
-#. module: mail
-#. openerp-web
-#: code:addons/mail/static/src/xml/activity.xml:45
-#, python-format
-msgid ", on"
-msgstr ", am"
+msgstr ", fällig am"
 
 #. module: mail
 #. openerp-web
@@ -333,7 +328,7 @@ msgstr "-------- Ältere Nachrichten anzeigen --------"
 #: code:addons/mail/static/src/xml/systray.xml:78
 #, python-format
 msgid "0 Future"
-msgstr "0 zukünftig"
+msgstr "0 kommende"
 
 #. module: mail
 #. openerp-web
@@ -897,7 +892,7 @@ msgstr "Anwenden"
 
 #. module: mail
 #. openerp-web
-#: code:addons/mail/static/src/xml/activity.xml:47
+#: code:addons/mail/static/src/xml/activity.xml:45
 #: model:ir.model.fields,field_description:mail.field_mail_activity_user_id
 #, python-format
 msgid "Assigned to"
@@ -1035,7 +1030,7 @@ msgstr "Anrufen"
 #. module: mail
 #. openerp-web
 #: code:addons/mail/static/src/js/followers.js:341
-#: code:addons/mail/static/src/xml/activity.xml:67
+#: code:addons/mail/static/src/xml/activity.xml:65
 #: model:ir.ui.view,arch_db:mail.email_compose_message_wizard_form
 #: model:ir.ui.view,arch_db:mail.mail_wizard_invite_form
 #: model:ir.ui.view,arch_db:mail.view_mail_form
@@ -1098,7 +1093,7 @@ msgstr "CC"
 #. module: mail
 #: model:ir.ui.view,arch_db:mail.view_mail_tracking_value_form
 msgid "Change"
-msgstr "Wechselgeld"
+msgstr "Ändern"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_tracking_value_field
@@ -1329,10 +1324,7 @@ msgid "Create Date"
 msgstr "Erstellt am"
 
 #. module: mail
-#. openerp-web
-#: code:addons/mail/static/src/xml/activity.xml:41
 #: model:ir.ui.view,arch_db:mail.mail_activity_view_search
-#, python-format
 msgid "Created By"
 msgstr "Angelegt von"
 
@@ -1358,6 +1350,8 @@ msgid "Created by"
 msgstr "Erstellt von"
 
 #. module: mail
+#. openerp-web
+#: code:addons/mail/static/src/xml/activity.xml:41
 #: model:ir.model.fields,field_description:mail.field_email_template_preview_create_date
 #: model:ir.model.fields,field_description:mail.field_mail_activity_create_date
 #: model:ir.model.fields,field_description:mail.field_mail_activity_type_create_date
@@ -1374,6 +1368,7 @@ msgstr "Erstellt von"
 #: model:ir.model.fields,field_description:mail.field_mail_test_simple_create_date
 #: model:ir.model.fields,field_description:mail.field_mail_tracking_value_create_date
 #: model:ir.model.fields,field_description:mail.field_mail_wizard_invite_create_date
+#, python-format
 msgid "Created on"
 msgstr "Erstellt am"
 
@@ -1567,7 +1562,7 @@ msgstr "Direkte Nachrichten"
 
 #. module: mail
 #. openerp-web
-#: code:addons/mail/static/src/xml/activity.xml:83
+#: code:addons/mail/static/src/xml/activity.xml:81
 #: model:ir.ui.view,arch_db:mail.email_template_preview_form
 #: model:ir.ui.view,arch_db:mail.mail_activity_view_form_popup
 #, python-format
@@ -1650,14 +1645,14 @@ msgstr "Dokumenten Name"
 
 #. module: mail
 #. openerp-web
-#: code:addons/mail/static/src/xml/activity.xml:81
+#: code:addons/mail/static/src/xml/activity.xml:79
 #, python-format
 msgid "Done"
 msgstr "Erledigt"
 
 #. module: mail
 #. openerp-web
-#: code:addons/mail/static/src/xml/activity.xml:79
+#: code:addons/mail/static/src/xml/activity.xml:77
 #, python-format
 msgid "Done & Schedule Next"
 msgstr "Fertig und nächstes Element planen"
@@ -1697,7 +1692,7 @@ msgstr "Dynamischer Platzhaltergenerator"
 
 #. module: mail
 #. openerp-web
-#: code:addons/mail/static/src/xml/activity.xml:64
+#: code:addons/mail/static/src/xml/activity.xml:62
 #, python-format
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -2588,7 +2583,7 @@ msgstr ""
 "werden, z.B. \"{'field': 'value'}\""
 
 #. module: mail
-#: code:addons/mail/models/mail_thread.py:1791
+#: code:addons/mail/models/mail_thread.py:1792
 #, python-format
 msgid ""
 "Invalid record set: should be called as model (without records) or on "
@@ -2960,7 +2955,7 @@ msgstr "Zuhörer"
 #. module: mail
 #: model:ir.model,name:mail.model_mail_channel_partner
 msgid "Listeners of a Channel"
-msgstr ""
+msgstr "Zuhörer eines Kanals"
 
 #. module: mail
 #: selection:mail.channel,channel_type:0
@@ -3069,7 +3064,7 @@ msgstr "Mailing Opt-Out"
 
 #. module: mail
 #. openerp-web
-#: code:addons/mail/static/src/xml/activity.xml:61
+#: code:addons/mail/static/src/xml/activity.xml:59
 #, python-format
 msgid "Mark Done"
 msgstr "Als erledigt markieren"
@@ -3597,7 +3592,7 @@ msgstr "Nächste verfügbare Aktivitäten"
 #: code:addons/mail/static/src/xml/web_kanban_activity.xml:22
 #, python-format
 msgid "No activities planned."
-msgstr "Keine geplanten aktivitäten."
+msgstr "Keine Aktivitäten geplant."
 
 #. module: mail
 #. openerp-web
@@ -4861,6 +4856,9 @@ msgid ""
 "Specify a model if the activity should be specific to a model and not "
 "available when managing activities for other models."
 msgstr ""
+"Geben Sie ein Modell an, wenn die Aktivität sich auf ein bestimmtes Modell "
+"beziehen und nicht verfügbar sein soll, wenn Aktivitäten für andere Modelle "
+"verwaltet werden."
 
 #. module: mail
 #. openerp-web
@@ -5095,8 +5093,9 @@ msgstr ""
 "Adresse gefunden wird."
 
 #. module: mail
-#: code:addons/mail/models/mail_message.py:575
-#: code:addons/mail/models/mail_message.py:670
+#: code:addons/mail/models/mail_activity.py:165
+#: code:addons/mail/models/mail_message.py:579
+#: code:addons/mail/models/mail_message.py:674
 #, python-format
 msgid ""
 "The requested operation cannot be completed due to security restrictions. Please contact your system administrator.\n"
@@ -5564,7 +5563,7 @@ msgstr "Ansicht"
 #: code:addons/mail/models/mail_thread.py:668
 #, python-format
 msgid "View %s"
-msgstr ""
+msgstr "%s ansehen"
 
 #. module: mail
 #. openerp-web
@@ -5626,7 +5625,7 @@ msgstr "Wer kann Ihre Gruppen-Aktivitäten abonnieren?"
 
 #. module: mail
 #. openerp-web
-#: code:addons/mail/static/src/xml/activity.xml:77
+#: code:addons/mail/static/src/xml/activity.xml:75
 #, python-format
 msgid "Write Feedback"
 msgstr "Schreibe ein Feedback"
@@ -5767,7 +5766,7 @@ msgid "Your template should define email_from"
 msgstr "Ihre Vorlage sollte email_from beinhalten"
 
 #. module: mail
-#: code:addons/mail/models/mail_thread.py:965
+#: code:addons/mail/models/mail_thread.py:966
 #, python-format
 msgid "alias %s: %s"
 msgstr "alias %s: %s"
@@ -5844,10 +5843,16 @@ msgid "has been"
 msgstr "wurde"
 
 #. module: mail
-#: code:addons/mail/models/mail_alias.py:271
+#: code:addons/mail/models/mail_alias.py:282
 #, python-format
 msgid "incorrectly configured alias"
 msgstr "Nicht richtig konfigurierter alias "
+
+#. module: mail
+#: code:addons/mail/models/mail_alias.py:278
+#, python-format
+msgid "incorrectly configured alias (unknown reference record)"
+msgstr "Nicht richtig konfigurierter Alias (unbekannter Referenzdatensatz)"
 
 #. module: mail
 #: model:ir.model,name:mail.model_ir_actions_server
@@ -5988,13 +5993,13 @@ msgid "restricted to channel members"
 msgstr "beschränkt auf Kanalmitglieder"
 
 #. module: mail
-#: code:addons/mail/models/mail_alias.py:276
+#: code:addons/mail/models/mail_alias.py:287
 #, python-format
 msgid "restricted to followers"
 msgstr "beschränkt auf Follower"
 
 #. module: mail
-#: code:addons/mail/models/mail_alias.py:280
+#: code:addons/mail/models/mail_alias.py:291
 #, python-format
 msgid "restricted to known authors"
 msgstr "beschränkt auf unbekannte Autoren"
@@ -6009,7 +6014,7 @@ msgstr "Verkauf"
 #: code:addons/mail/models/mail_thread.py:935
 #: code:addons/mail/models/mail_thread.py:938
 #: code:addons/mail/models/mail_thread.py:943
-#: code:addons/mail/models/mail_thread.py:965
+#: code:addons/mail/models/mail_thread.py:966
 #, python-format
 msgid "skipping"
 msgstr "Überspringen"
@@ -6022,7 +6027,7 @@ msgid "this document"
 msgstr "diesem Dokument"
 
 #. module: mail
-#: code:addons/mail/models/mail_thread.py:965
+#: code:addons/mail/models/mail_thread.py:966
 #, python-format
 msgid "unknown error"
 msgstr "unbekannter Fehler"

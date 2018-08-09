@@ -13,7 +13,7 @@ class WebSuite(odoo.tests.HttpCase):
 
     def test_01_js(self):
         # webclient desktop test suite
-        self.phantom_js('/web/tests?mod=web', "", "", login='admin', timeout=300)
+        self.phantom_js('/web/tests?mod=web', "", "", login='admin', timeout=360)
 
     def test_02_js(self):
         # webclient mobile test suite
@@ -33,6 +33,6 @@ class WebSuite(odoo.tests.HttpCase):
             filename = asset['filename']
             if not filename or asset['atype'] != 'text/javascript':
                 continue
-            with open(filename, 'r') as fp:
-                if RE_ONLY.search(fp.read()):
+            with open(filename, 'rb') as fp:
+                if RE_ONLY.search(fp.read().decode('utf-8')):
                     self.fail("`QUnit.only()` used in file %r" % asset['url'])

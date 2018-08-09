@@ -3,7 +3,7 @@
 # * survey
 # 
 # Translators:
-# Martin Trigaux <mat@odoo.com>, 2017
+# Martin Trigaux, 2017
 # Erwin van der Ploeg <erwin@odooexperts.nl>, 2017
 # Yenthe Van Ginneken <yenthespam@gmail.com>, 2017
 # Cas Vissers <casvissers@brahoo.nl>, 2017
@@ -261,11 +261,13 @@ msgid ""
 "Add a list of email of recipients (will not be converted into contacts). "
 "Separated by commas, semicolons or newline..."
 msgstr ""
+"Voeg een lijst met e-mail van ontvangers toe (wordt niet omgezet in "
+"contacten). Gescheiden door komma's, puntkomma's of nieuwe regels ..."
 
 #. module: survey
 #: model:ir.ui.view,arch_db:survey.survey_email_compose_message
 msgid "Add existing contacts..."
-msgstr ""
+msgstr "Voeg bestaande contacten toe..."
 
 #. module: survey
 #: model:survey.label,value:survey.fcol_2_1_3
@@ -337,7 +339,7 @@ msgid ""
 "Attachments are linked to a document through model / res_id and to the "
 "message through this field."
 msgstr ""
-"Bijlages zijn gelinkt aan het document via het model / res_id en aan het "
+"Bijlages zijn gekoppeld aan het document via het model / res_id en aan het "
 "bericht via dit veld."
 
 #. module: survey

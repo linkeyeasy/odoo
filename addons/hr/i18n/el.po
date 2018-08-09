@@ -3,17 +3,17 @@
 # * hr
 # 
 # Translators:
-# Martin Trigaux <mat@odoo.com>, 2017
+# Martin Trigaux, 2017
 # Kostas Goutoudis <goutoudis@gmail.com>, 2017
 # Stefanos Nikou <stefanos.nikou@gmail.com>, 2017
 # George Tarasidis <george_tarasidis@yahoo.com>, 2017
 # Dafao Berto <netmastersgr@gmail.com>, 2017
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.saas~18\n"
+"Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-02 11:26+0000\n"
-"PO-Revision-Date: 2017-10-02 11:26+0000\n"
+"POT-Creation-Date: 2018-02-19 13:43+0000\n"
+"PO-Revision-Date: 2018-02-19 13:43+0000\n"
 "Last-Translator: Dafao Berto <netmastersgr@gmail.com>, 2017\n"
 "Language-Team: Greek (https://www.transifex.com/odoo/teams/41243/el/)\n"
 "MIME-Version: 1.0\n"
@@ -71,6 +71,8 @@ msgid ""
 "<span class=\"o_unfollow\">Unfollow</span>\n"
 "                                    <span class=\"o_following\">Following</span>"
 msgstr ""
+"<span class=\"o_unfollow\">Άρση Ακολούθησης</span>\n"
+"                                    <span class=\"o_following\">Ακολουθώ</span>"
 
 #. module: hr
 #: model:ir.ui.view,arch_db:hr.hr_department_view_kanban
@@ -128,7 +130,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:hr.view_department_filter
 #: model:ir.ui.view,arch_db:hr.view_employee_filter
 msgid "Archived"
-msgstr "Αρχειοθετημένα"
+msgstr "Αρχειοθετήθηκαν"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee_bank_account_id
@@ -256,11 +258,6 @@ msgstr "Πλήρες Όνομα"
 #: model:ir.ui.menu,name:hr.menu_human_resources_configuration
 msgid "Configuration"
 msgstr "Διαμόρφωση"
-
-#. module: hr
-#: model:ir.actions.act_window,name:hr.hr_config_settings_action
-msgid "Configure HR"
-msgstr ""
 
 #. module: hr
 #: model:hr.job,name:hr.job_consultant
@@ -403,6 +400,7 @@ msgstr "Όνομα Εργαζόμενου"
 #: model:ir.ui.menu,name:hr.menu_hr_root
 #: model:ir.ui.menu,name:hr.menu_open_view_employee_list_my
 #: model:ir.ui.view,arch_db:hr.hr_department_view_kanban
+#: model:ir.ui.view,arch_db:hr.res_config_settings_view_form
 #: model:ir.ui.view,arch_db:hr.view_employee_filter
 #: model:ir.ui.view,arch_db:hr.view_employee_tree
 #: model:ir.ui.view,arch_db:hr.view_partner_tree2
@@ -925,11 +923,6 @@ msgid "Private Information"
 msgstr ""
 
 #. module: hr
-#: model:ir.ui.view,arch_db:hr.res_config_settings_view_form
-msgid "Prout prout prout"
-msgstr ""
-
-#. module: hr
 #: model:hr.job,website_description:hr.job_consultant
 msgid "Quantify and negotiate the resources required"
 msgstr ""
@@ -1016,6 +1009,7 @@ msgid ""
 msgstr ""
 
 #. module: hr
+#: model:ir.actions.act_window,name:hr.hr_config_settings_action
 #: model:ir.ui.menu,name:hr.hr_menu_configuration
 #: model:ir.ui.view,arch_db:hr.hr_department_view_kanban
 msgid "Settings"
